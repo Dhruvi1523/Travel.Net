@@ -1,0 +1,25 @@
+
+# Visual Studio and build output
+.vs/
+bin/
+obj/
+*.csproj.user
+
+# Environment-specific configuration files with secrets
+appsettings.*.json
+appsettings.json
+
+# Temporary or untracked files
+temp.html
+
+# Optional: Ignore user-specific launch settings if sensitive
+# Properties/launchSettings.json
+
+# Optional: Ignore Views if not used (API-only project)
+# backend/Views/
+
+# Common .NET ignores (optional, if not covered above)
+*.suo
+*.user
+*.cache
+*.log
