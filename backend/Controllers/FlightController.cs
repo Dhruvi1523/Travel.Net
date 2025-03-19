@@ -24,5 +24,11 @@ namespace backend.Controllers
             var result = await _flightService.SearchAirportAsync(query);
             return Ok(result);
         }
+
+        [HttpPost("search-flight")]
+        public async Task<IActionResult> SearchFlights([FromBody] SearchFlightsRequest request){
+            var result = await _flightService.SearchFlightsAsync(request);
+            return Ok(result);
+        }
     }
 }
