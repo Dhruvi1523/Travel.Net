@@ -13,6 +13,25 @@ builder.Services.AddScoped<IMongoDbService, MongoDbService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
+
+builder.Services.AddHttpClient("AirScrapperClient", client =>
+{
+    var flightApiConfig = builder.Configuration.GetSection("AirScrapperApi");
+    client.BaseAddress = new Uri(flightApiConfig["BaseUrl"]);
+    client.DefaultRequestHeaders.Add("X-RapidAPI-Key", flightApiConfig["ApiKey"]);
+    client.DefaultRequestHeaders.Add("X-RapidAPI-Host", flightApiConfig["ApiHost"]);
+    client.Timeout = TimeSpan.FromSeconds(30);
+});
+
+builder.Services.AddScoped<IFlightService, FlightService>(sp =>
+{
+    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+    var httpClient = httpClientFactory.CreateClient("AirScrapperClient");
+    var configuration = sp.GetRequiredService<IConfiguration>();
+    var logger = sp.GetRequiredService<ILogger<FlightService>>();
+    return new FlightService(httpClient, configuration, logger);
+});
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
