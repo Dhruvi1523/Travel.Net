@@ -53,8 +53,5 @@ namespace backend.Models
         public DateTime Created { get; set; } // When it was issued
     }
 
-    public class RefreshTokenRequest{
-        public string AccessToken { get ; set ;} = null! ;
-        public string RefreshToken { get ; set ;} = null! ;
-    }
+    
 }

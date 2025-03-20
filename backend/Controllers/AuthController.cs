@@ -24,7 +24,7 @@ namespace backend.Controllers
         /// </summary>
         /// <param name="model">The registration details including username, password, and email.</param>
         /// <returns>An IActionResult indicating success with the registered username or an error message.</returns>
-        
+
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
@@ -32,11 +32,7 @@ namespace backend.Controllers
             {
                 var user = await _authService.RegisterAsync(model);
                 _logger.LogInformation("User {Username} registered via API", user.Username);
-                return Ok(new
-                {
-                    message = "Registration Successful...",
-                    Username = model.Username
-                });
+                return Ok("Registration Successfully..");
             }
             catch (Exception ex)
             {
@@ -57,7 +53,24 @@ namespace backend.Controllers
             {
                 var authResponse = await _authService.LoginAsync(model);
                 _logger.LogInformation("User {Username} logged in via API", model.Username);
-                return Ok(authResponse);
+
+                Response.Cookies.Append("TravelAccessToken", authResponse.Token, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = authResponse.Expires
+                });
+                
+                Response.Cookies.Append("TravelRefreshToken", authResponse.Token, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires =  DateTime.UtcNow.AddDays(7) 
+                });
+
+                return Ok("Login Successfully...");
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -77,11 +90,13 @@ namespace backend.Controllers
         /// <param name="request">The request containing the expired access token and refresh token.</param>
         /// <returns>An IActionResult with a new access token and refresh token or an error message.</returns>
         [HttpPost("refresh")]
-        public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest request)
+        public async Task<IActionResult> Refresh()
         {
             try
             {
-                var authResponse = await _authService.RefreshTokenAsync(request.AccessToken, request.RefreshToken);
+                var accessToken = Request.Cookies["TravelAccessToken"];
+                var refreshToken = Request.Cookies["TravelRefreshToken"];
+                var authResponse = await _authService.RefreshTokenAsync(accessToken , refreshToken);
                 _logger.LogInformation("Token refreshed via API");
                 return Ok(authResponse);
             }
@@ -102,7 +117,7 @@ namespace backend.Controllers
         /// </summary>
         /// <returns>An IActionResult with the user's username and email, or an error if unauthorized or not found.</returns>
         [HttpGet("me")]
-        [Authorize] // Protects this endpoint
+        // [Authorize] // Protects this endpoint
         public async Task<IActionResult> GetUserDetails()
         {
             try
@@ -136,5 +151,6 @@ namespace backend.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
     }
 }

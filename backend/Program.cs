@@ -34,7 +34,17 @@ builder.Services.AddScoped<IFlightService, FlightService>(sp =>
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
-    {
+    {    options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                if (context.Request.Cookies.ContainsKey("TravelAccessToken"))
+                {
+                    context.Token = context.Request.Cookies["TravelAccessToken"];
+                }
+                return Task.CompletedTask;
+            }
+        };
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -47,6 +57,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", builder =>
+    {
+        builder.WithOrigins("http://localhost:8080") // Allow requests from the frontend origin
+               .AllowAnyMethod()                     // Allow GET, POST, etc.
+               .AllowAnyHeader();                    // Allow any headers (e.g., Content-Type)
+    });
+});
 
 builder.Services.AddLogging(logging =>
 {
@@ -68,7 +88,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
+app.UseCors("AllowFrontend");
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
