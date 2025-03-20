@@ -4,6 +4,7 @@
 bin/
 obj/
 *.csproj.user
+node_modules/
 
 # Environment-specific configuration files with secrets
 appsettings.*.json
