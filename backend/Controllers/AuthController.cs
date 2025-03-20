@@ -62,7 +62,7 @@ namespace backend.Controllers
                     Expires = authResponse.Expires
                 });
                 
-                Response.Cookies.Append("TravelRefreshToken", authResponse.Token, new CookieOptions
+                Response.Cookies.Append("TravelRefreshToken", authResponse.RefreshToken, new CookieOptions
                 {
                     HttpOnly = true,
                     Secure = true,
@@ -89,7 +89,7 @@ namespace backend.Controllers
         /// </summary>
         /// <param name="request">The request containing the expired access token and refresh token.</param>
         /// <returns>An IActionResult with a new access token and refresh token or an error message.</returns>
-        [HttpPost("refresh")]
+        [HttpGet("refresh")]
         public async Task<IActionResult> Refresh()
         {
             try
@@ -98,7 +98,22 @@ namespace backend.Controllers
                 var refreshToken = Request.Cookies["TravelRefreshToken"];
                 var authResponse = await _authService.RefreshTokenAsync(accessToken , refreshToken);
                 _logger.LogInformation("Token refreshed via API");
-                return Ok(authResponse);
+                Response.Cookies.Append("TravelAccessToken", authResponse.Token, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = authResponse.Expires
+                });
+                
+                Response.Cookies.Append("TravelRefreshToken", authResponse.RefreshToken, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires =  DateTime.UtcNow.AddDays(7) 
+                });
+                return Ok("Refresh Completed...");
             }
             catch (SecurityTokenException ex)
             {

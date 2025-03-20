@@ -128,14 +128,14 @@ namespace backend.Services
             var refreshToken = _tokenService.GenerateRefreshToken();
             var expiry = DateTime.UtcNow.AddMinutes(double.Parse(_configuration["Jwt:ExpiryMinutes"]));
 
-            user.RefreshTokens.Add(
+            user.RefreshToken = 
                 new RefreshToken
                 {
                     Token = refreshToken,
                     Expires = DateTime.UtcNow.AddDays(7),
                     IsRevoked = false,
                     Created = DateTime.UtcNow
-                });
+                };
 
             await _mongoDbService.User.ReplaceOneAsync(u => u.Id == user.Id, user);
 
@@ -169,9 +169,8 @@ namespace backend.Services
                 throw new SecurityTokenException("Invalid token");
             }
 
-            var storedRefreshToken = user.RefreshTokens.FirstOrDefault(rt => rt.Token == refreshToken);
 
-            if (storedRefreshToken == null || storedRefreshToken.IsRevoked || storedRefreshToken.Expires <= DateTime.UtcNow)
+            if (user.RefreshToken == null || user.RefreshToken.IsRevoked || user.RefreshToken.Expires <= DateTime.UtcNow)
             {
                 _logger.LogWarning("Refresh failed: Invalid or expired refresh token for {Username}", username);
                 throw new SecurityTokenException("Invalid refresh token");
@@ -181,14 +180,14 @@ namespace backend.Services
             var newRefreshToken = _tokenService.GenerateRefreshToken();
             var expiry = DateTime.UtcNow.AddMinutes(double.Parse(_configuration["Jwt:ExpiryMinutes"]));
 
-            user.RefreshTokens.Remove(storedRefreshToken);
-            user.RefreshTokens.Add(new RefreshToken
+          
+            user.RefreshToken = new RefreshToken
             {
                 Token = newRefreshToken,
                 Expires = DateTime.UtcNow.AddDays(7),
                 Created = DateTime.UtcNow,
                 IsRevoked = false
-            });
+            };
 
             await _mongoDbService.User.ReplaceOneAsync(u => u.Id == user.Id, user);
             _logger.LogInformation("Token refreshed for user {Username}", username);

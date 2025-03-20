@@ -22,6 +22,6 @@ namespace backend.Models
         [Required]
         [EmailAddress]
         public string Email { get; set; } = null!; // Ensures valid email format
-        public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>(); // Store multiple refresh tokens
+        public RefreshToken RefreshToken { get; set; }    // Store multiple refresh tokens
     }
 }
