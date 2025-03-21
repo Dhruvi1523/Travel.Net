@@ -2,8 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace backend.Models
 {
-  
-   
+
+
     /// <summary>
     /// Represents the request data for searching flights using the Sky Scrapper API.
     /// </summary>
@@ -48,7 +48,7 @@ namespace backend.Models
         /// The cabin class (e.g., "economy", "business").
         /// </summary>
         [Required(ErrorMessage = "Cabin class is required.")]
-        public string CabinClass { get; set; } ="economy";
+        public string CabinClass { get; set; } = "economy";
 
         /// <summary>
         /// The number of adult passengers (minimum 1).
@@ -86,88 +86,50 @@ namespace backend.Models
 
     }
 
-   
-    /// <summary>
-    /// Represents a simplified flight search result for the frontend.
-    /// </summary>
     public class SearchFlightResult
     {
-        /// <summary>
-        /// The unique identifier of the itinerary.
-        /// </summary>
         public string Id { get; set; }
-
-        /// <summary>
-        /// The session ID associated with the flight search.
-        /// </summary>
         public string SessionId { get; set; }
 
-        /// <summary>
-        /// The name of the airline (e.g., "IndiGo").
-        /// </summary>
-        public string AirlineName { get; set; }
-
-        /// <summary>
-        /// Details of the outbound flight leg.
-        /// </summary>
         public FlightLeg OutboundLeg { get; set; }
-
-        /// <summary>
-        /// Details of the return flight leg.
-        /// </summary>
         public FlightLeg ReturnLeg { get; set; }
 
-        /// <summary>
-        /// The total price of the itinerary, formatted with currency (e.g., "₹12,010").
-        /// </summary>
         public string Price { get; set; }
+        public string PricingOptionId { get; set; }
 
-        /// <summary>
-        /// Indicates whether free cancellation is allowed.
-        /// </summary>
         public bool IsFreeCancellation { get; set; }
+        public bool IsChangeAllowed { get; set; }
+        public bool IsSelfTransferAllowed { get; set; }
+        public bool IsPartiallyRefundable { get; set; }
+
+        public List<string> Tags { get; set; }
+        public double Score { get; set; }
     }
 
-    /// <summary>
-    /// Represents a single flight leg (outbound or return).
-    /// </summary>
     public class FlightLeg
     {
-        /// <summary>
-        /// The departure date in a user-friendly format (e.g., "2025-03-27").
-        /// </summary>
-        public string DepartureDate { get; set; }
+        public string LegId { get; set; }
+        public string FlightNumber { get; set; }
+        public string AirlineName { get; set; }
+        public string AirlineLogo { get; set; }
 
-        /// <summary>
-        /// The departure time in a user-friendly format (e.g., "09:45 PM").
-        /// </summary>
-        public string DepartureTime { get; set; }
+        public string OriginAirportCode { get; set; }
+        public string OriginCityName { get; set; }
+        public string DestinationAirportCode { get; set; }
+        public string DestinationCityName { get; set; }
 
-        /// <summary>
-        /// The arrival date in a user-friendly format (e.g., "2025-03-28").
-        /// </summary>
-        public string ArrivalDate { get; set; }
+        public DateTime Departure { get; set; }
+        public DateTime Arrival { get; set; }
 
-        /// <summary>
-        /// The arrival time in a user-friendly format (e.g., "12:30 AM").
-        /// </summary>
-        public string ArrivalTime { get; set; }
-
-        /// <summary>
-        /// The number of stops (e.g., 0 for "Non Stop").
-        /// </summary>
         public int StopCount { get; set; }
-
-        /// <summary>
-        /// A user-friendly description of stops (e.g., "Non Stop").
-        /// </summary>
         public string StopDescription => StopCount == 0 ? "Non Stop" : $"{StopCount} Stop{(StopCount > 1 ? "s" : "")}";
 
-        /// <summary>
-        /// The duration of the flight in a user-friendly format (e.g., "2h 55m").
-        /// </summary>
         public string Duration { get; set; }
+
+      
     }
 
-    
+   
+
+
 }

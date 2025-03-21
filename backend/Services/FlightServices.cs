@@ -21,6 +21,7 @@ namespace backend.Services
         /// <returns>A JSON string containing an API response with a list of matching entities for autocomplete, or an error message.</returns>
         Task<string> SearchAirportAsync(string query);
         Task<string> SearchFlightsAsync(SearchFlightsRequest request);
+        // Task<string> GetFlightsDetailsAsync(GetFlightDetailsRequest request);
     }
 
     /// <summary>
@@ -166,147 +167,227 @@ namespace backend.Services
         /// or an error message if the request fails.
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="request"/> is null.</exception>
-        public async Task<string> SearchFlightsAsync(SearchFlightsRequest request)
-        {
-
-            if (request == null)
-            {
-                _logger.LogWarning("SearchFlightsAsync called with null request.");
-                return JsonSerializer.Serialize(new ApiResponse<List<SearchFlightResult>>(success: false, data: null, error: "Request cannot be null."));
-            }
-
-            try
-            {
-                _logger.LogInformation("Searching flights with criteria: {OriginSkyId} to {DestinationSkyId} on {Date}", request.OriginSkyId, request.DestinationSkyId, request.Date);
-
-                var queryParams = new List<string>
+public async Task<string> SearchFlightsAsync(SearchFlightsRequest request)
 {
-    $"originSkyId={Uri.EscapeDataString(request.OriginSkyId)}",
-    $"destinationSkyId={Uri.EscapeDataString(request.DestinationSkyId)}",
-    $"originEntityId={Uri.EscapeDataString(request.OriginEntityId)}",
-    $"destinationEntityId={Uri.EscapeDataString(request.DestinationEntityId)}",
-    $"date={Uri.EscapeDataString(request.Date)}",
-    $"cabinClass={Uri.EscapeDataString(request.CabinClass.ToLower())}", // Ensuring lowercase if API expects it
-    $"adults={request.Adults}",
-    $"childrens={request.Children}",
-    $"infants={request.Infants}",
-    $"sortBy={Uri.EscapeDataString(request.SortBy.ToLower())}", // Ensuring lowercase if API expects it
-    $"limit={request.Limit}",
-    $"currency={Currency}",
-    $"market={Market}",
-    $"countryCode={CountryCode}"
-};
+    if (request == null)
+    {
+        _logger.LogWarning("SearchFlightsAsync called with null request.");
+        return JsonSerializer.Serialize(new ApiResponse<List<SearchFlightResult>>(false, null, "Request cannot be null."));
+    }
 
+    try
+    {
+        _logger.LogInformation("Searching flights from {OriginSkyId} to {DestinationSkyId} on {Date}", 
+            request.OriginSkyId, request.DestinationSkyId, request.Date);
 
+        var queryParams = new List<string>
+        {
+            $"originSkyId={Uri.EscapeDataString(request.OriginSkyId)}",
+            $"destinationSkyId={Uri.EscapeDataString(request.DestinationSkyId)}",
+            $"originEntityId={Uri.EscapeDataString(request.OriginEntityId)}",
+            $"destinationEntityId={Uri.EscapeDataString(request.DestinationEntityId)}",
+            $"date={Uri.EscapeDataString(request.Date)}",
+            $"cabinClass={Uri.EscapeDataString(request.CabinClass.ToLower())}",
+            $"adults={request.Adults}",
+            $"children={request.Children}",
+            $"infants={request.Infants}",
+            $"sortBy={Uri.EscapeDataString(request.SortBy.ToLower())}",
+            $"limit={request.Limit}",
+            $"currency={Currency}",
+            $"market={Market}",
+            $"countryCode={CountryCode}"
+        };
 
-                if (!string.IsNullOrEmpty(request.ReturnDate))
-                {
-                    queryParams.Add($"returnDate={Uri.EscapeDataString(request.ReturnDate)}");
-                }
-
-                if (request.CarriersIds != null && request.CarriersIds.Count > 0)
-                {
-                    queryParams.Add($"carriersIds={string.Join(",", request.CarriersIds)}");
-                }
-
-                var requestUrl = $"api/v2/flights/searchFlights?{string.Join("&", queryParams)}";
-
-                var response = await _httpClient.GetAsync(requestUrl);
-                response.EnsureSuccessStatusCode();
-
-                var content = await response.Content.ReadAsStringAsync();
-
-                _logger.LogDebug("Sky Scrapper API response for flight search: {Content}", content);
-
-                using var jsonDoc = JsonDocument.Parse(content);
-                var root = jsonDoc.RootElement;
-
-                // Check for API status
-                if (!root.TryGetProperty("status", out var statusElement) || !statusElement.GetBoolean())
-                {
-                    _logger.LogWarning("Invalid response status for flight search.");
-                    return JsonSerializer.Serialize(new ApiResponse<List<SearchFlightResult>>(success: false, data: null, error: "Invalid response from API."));
-                }
-
-                // Extract the session ID
-                if (!root.TryGetProperty("sessionId", out var sessionIdElement) || sessionIdElement.ValueKind != JsonValueKind.String)
-                {
-                    _logger.LogWarning("Session ID not found in the API response.");
-                    return JsonSerializer.Serialize(new ApiResponse<List<SearchFlightResult>>(success: false, data: null, error: "Session ID not found in the response."));
-                }
-                var sessionId = sessionIdElement.GetString();
-
-                if (!root.TryGetProperty("data", out var dataElement) || !dataElement.TryGetProperty("itineraries", out var itinerariesElement) || itinerariesElement.ValueKind != JsonValueKind.Array)
-                {
-                    _logger.LogWarning("No flights found for the given criteria.");
-                    return JsonSerializer.Serialize(new ApiResponse<List<SearchFlightResult>>(success: true, data: new List<SearchFlightResult>()));
-                }
-
-                var flightResults = new List<SearchFlightResult>();
-                foreach (var itinerary in itinerariesElement.EnumerateArray())
-                {
-                    var result = new SearchFlightResult
-                    {
-                        Id = itinerary.GetProperty("id").GetString(),
-                        SessionId = sessionId,
-                        AirlineName = itinerary.GetProperty("legs")[0].GetProperty("carriers").GetProperty("marketing")[0].GetProperty("name").GetString(),
-                        Price = itinerary.GetProperty("price").GetProperty("formatted").GetString(),
-                        IsFreeCancellation = itinerary.GetProperty("farePolicy").GetProperty("isCancellationAllowed").GetBoolean()
-                    };
-
-
-
-                    var outboundLeg = itinerary.GetProperty("legs")[0];
-                    var outboundDeparture = DateTime.Parse(outboundLeg.GetProperty("departure").GetString());
-                    var outboundArrival = DateTime.Parse(outboundLeg.GetProperty("arrival").GetString());
-                    var outboundDuration = outboundLeg.GetProperty("durationInMinutes").GetInt32();
-                    result.OutboundLeg = new FlightLeg
-                    {
-                        DepartureDate = outboundDeparture.ToString("yyyy-MM-dd"), // Extract date
-                        DepartureTime = outboundDeparture.ToString("hh:mm tt"),
-                        ArrivalDate = outboundArrival.ToString("yyyy-MM-dd"),     // Extract date
-                        ArrivalTime = outboundArrival.ToString("hh:mm tt"),
-                        StopCount = outboundLeg.GetProperty("stopCount").GetInt32(),
-                        Duration = FormatDuration(outboundDuration)
-                    };
-
-                    // Return leg (legs[1])
-                    var returnLeg = itinerary.GetProperty("legs")[1];
-                    var returnDeparture = DateTime.Parse(returnLeg.GetProperty("departure").GetString());
-                    var returnArrival = DateTime.Parse(returnLeg.GetProperty("arrival").GetString());
-                    var returnDuration = returnLeg.GetProperty("durationInMinutes").GetInt32();
-                    result.ReturnLeg = new FlightLeg
-                    {
-                        DepartureDate = returnDeparture.ToString("yyyy-MM-dd"), // Extract date
-                        DepartureTime = returnDeparture.ToString("hh:mm tt"),
-                        ArrivalDate = returnArrival.ToString("yyyy-MM-dd"),     // Extract date
-                        ArrivalTime = returnArrival.ToString("hh:mm tt"),
-                        StopCount = returnLeg.GetProperty("stopCount").GetInt32(),
-                        Duration = FormatDuration(returnDuration)
-                    };
-
-                    flightResults.Add(result);
-                }
-
-                return JsonSerializer.Serialize(new ApiResponse<List<SearchFlightResult>>(success: true, data: flightResults));
-            }
-            catch (HttpRequestException ex)
-            {
-                _logger.LogError(ex, "Failed to fetch flights due to network or API error.");
-                return JsonSerializer.Serialize(new ApiResponse<List<SearchFlightResult>>(success: false, data: null, error: "Failed to connect to Sky Scrapper API."));
-            }
-            catch (JsonException ex)
-            {
-                _logger.LogError(ex, "Failed to parse Sky Scrapper API response for flight search.");
-                return JsonSerializer.Serialize(new ApiResponse<List<SearchFlightResult>>(success: false, data: null, error: "Invalid API response format."));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Unexpected error while searching flights.");
-                return JsonSerializer.Serialize(new ApiResponse<List<SearchFlightResult>>(success: false, data: null, error: "An unexpected error occurred."));
-            }
+        if (!string.IsNullOrEmpty(request.ReturnDate))
+        {
+            queryParams.Add($"returnDate={Uri.EscapeDataString(request.ReturnDate)}");
+        }
+        if (request.CarriersIds?.Count > 0)
+        {
+            queryParams.Add($"carriersIds={string.Join(",", request.CarriersIds)}");
         }
 
+        var requestUrl = $"api/v2/flights/searchFlights?{string.Join("&", queryParams)}";
+        _logger.LogDebug("Request URL: {RequestUrl}", requestUrl);
+
+        var response = await _httpClient.GetAsync(requestUrl);
+        response.EnsureSuccessStatusCode();
+
+        var content = await response.Content.ReadAsStringAsync();
+        _logger.LogDebug("API response: {Content}", content);
+
+        using var jsonDoc = JsonDocument.Parse(content);
+        var root = jsonDoc.RootElement;
+
+        if (!root.TryGetProperty("status", out var statusElement) || !statusElement.GetBoolean())
+        {
+            _logger.LogWarning("Invalid API response: Status is not true.");
+            return JsonSerializer.Serialize(new ApiResponse<List<SearchFlightResult>>(false, null, "Invalid API response."));
+        }
+
+        if (!root.TryGetProperty("data", out var dataElement) ||
+            !dataElement.TryGetProperty("context", out var contextElement) ||
+            !contextElement.TryGetProperty("sessionId", out var sessionIdElement))
+        {
+            _logger.LogWarning("Invalid API response: Missing sessionId.");
+            return JsonSerializer.Serialize(new ApiResponse<List<SearchFlightResult>>(false, null, "Invalid API response: Missing sessionId."));
+        }
+
+        var sessionId = sessionIdElement.GetString();
+        if (!dataElement.TryGetProperty("itineraries", out var itinerariesElement))
+        {
+            _logger.LogWarning("Invalid API response: Missing itineraries.");
+            return JsonSerializer.Serialize(new ApiResponse<List<SearchFlightResult>>(false, null, "Invalid API response: Missing itineraries."));
+        }
+
+        var itineraries = itinerariesElement.EnumerateArray();
+        var flightResults = new List<SearchFlightResult>();
+
+        foreach (var itinerary in itineraries)
+        {
+            if (!itinerary.TryGetProperty("legs", out var legsElement))
+            {
+                _logger.LogWarning("Invalid itinerary: Missing legs.");
+                continue;
+            }
+
+            var legs = legsElement.EnumerateArray().ToList();
+            if (legs.Count == 0)
+            {
+                _logger.LogWarning("Invalid itinerary: No legs found.");
+                continue;
+            }
+
+            var outboundLeg = legs[0];
+            var returnLeg = legs.Count > 1 ? (JsonElement?)legs[1] : null;
+
+            var result = new SearchFlightResult
+            {
+                Id = itinerary.GetProperty("id").GetString(),
+                SessionId = sessionId,
+                Price = itinerary.GetProperty("price").GetProperty("formatted").GetString(),
+                PricingOptionId = itinerary.GetProperty("price").GetProperty("pricingOptionId").GetString(),
+                OutboundLeg = ParseFlightLeg(outboundLeg),
+                ReturnLeg = returnLeg.HasValue ? ParseFlightLeg(returnLeg.Value) : null,
+                Tags = itinerary.TryGetProperty("tags", out var tagsElement)
+                    ? tagsElement.EnumerateArray().Select(tag => tag.GetString()).ToList()
+                    : new List<string>() ,
+             Score = itinerary.TryGetProperty("score", out var scoreElement)
+        ? scoreElement.GetDouble()
+        : 0.0
+            };
+
+            flightResults.Add(result);
+        }
+
+        return JsonSerializer.Serialize(new ApiResponse<List<SearchFlightResult>>(true, flightResults));
+    }
+    catch (HttpRequestException ex)
+    {
+        _logger.LogError(ex, "Network/API error.");
+        return JsonSerializer.Serialize(new ApiResponse<List<SearchFlightResult>>(false, null, "Failed to connect to API."));
+    }
+    catch (JsonException ex)
+    {
+        _logger.LogError(ex, "Failed to parse API response.");
+        return JsonSerializer.Serialize(new ApiResponse<List<SearchFlightResult>>(false, null, "Invalid API response format."));
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Unexpected error.");
+        return JsonSerializer.Serialize(new ApiResponse<List<SearchFlightResult>>(false, null, "An unexpected error occurred."));
+    }
+}
+private FlightLeg ParseFlightLeg(JsonElement leg)
+{
+    var flightLeg = new FlightLeg();
+
+    // Safely access properties with TryGetProperty
+    if (leg.TryGetProperty("id", out var legId))
+    {
+        flightLeg.LegId = legId.GetString();
+    }
+
+    // Access segments[0] for flightNumber
+    if (leg.TryGetProperty("segments", out var segments) && segments.GetArrayLength() > 0)
+    {
+        var firstSegment = segments[0];
+        if (firstSegment.TryGetProperty("flightNumber", out var flightNumber))
+        {
+            flightLeg.FlightNumber = flightNumber.GetString();
+        }
+    }
+
+    // Access carriers.marketing[0] for airline details
+    if (leg.TryGetProperty("carriers", out var carriers) &&
+        carriers.TryGetProperty("marketing", out var marketing) &&
+        marketing.GetArrayLength() > 0)
+    {
+        var marketingCarrier = marketing[0];
+        if (marketingCarrier.TryGetProperty("name", out var airlineName))
+        {
+            flightLeg.AirlineName = airlineName.GetString();
+        }
+        if (marketingCarrier.TryGetProperty("logoUrl", out var airlineLogo))
+        {
+            flightLeg.AirlineLogo = airlineLogo.GetString();
+        }
+    }
+
+    // Access origin details
+    if (leg.TryGetProperty("origin", out var origin))
+    {
+        if (origin.TryGetProperty("displayCode", out var originCode))
+        {
+            flightLeg.OriginAirportCode = originCode.GetString();
+        }
+        if (origin.TryGetProperty("city", out var originCity))
+        {
+            flightLeg.OriginCityName = originCity.GetString();
+        }
+    }
+
+    // Access destination details
+    if (leg.TryGetProperty("destination", out var destination))
+    {
+        if (destination.TryGetProperty("displayCode", out var destCode))
+        {
+            flightLeg.DestinationAirportCode = destCode.GetString();
+        }
+        if (destination.TryGetProperty("city", out var destCity))
+        {
+            flightLeg.DestinationCityName = destCity.GetString();
+        }
+    }
+
+    // Access departure and arrival times
+    if (leg.TryGetProperty("departure", out var departure))
+    {
+        flightLeg.Departure = DateTime.Parse(departure.GetString());
+    }
+    if (leg.TryGetProperty("arrival", out var arrival))
+    {
+        flightLeg.Arrival = DateTime.Parse(arrival.GetString());
+    }
+
+    // Access stopCount and duration
+    if (leg.TryGetProperty("stopCount", out var stopCount))
+    {
+        flightLeg.StopCount = stopCount.GetInt32();
+    }
+    if (leg.TryGetProperty("durationInMinutes", out var duration))
+    {
+        flightLeg.Duration = FormatDuration(duration.GetInt32());
+    }
+
+    return flightLeg;
+}
+
+
+        // public Task<string> GetFlightsDetailsAsync(GetFlightDetailsRequest request){
+            
+
+        // }
 
 
     }
