@@ -1,19 +1,18 @@
 using System.Text;
-using backend.Services ;
+using backend.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-
-
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllers(); // Use AddControllers() for a Web API (instead of AddControllersWithViews)
+
 builder.Services.AddScoped<IMongoDbService, MongoDbService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
-
+// Configure HttpClient for AirScrapper API
 builder.Services.AddHttpClient("AirScrapperClient", client =>
 {
     var flightApiConfig = builder.Configuration.GetSection("AirScrapperApi");
@@ -32,13 +31,22 @@ builder.Services.AddScoped<IFlightService, FlightService>(sp =>
     return new FlightService(httpClient, configuration, logger);
 });
 
+// Configure JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
-    {    options.Events = new JwtBearerEvents
+    {
+        options.Events = new JwtBearerEvents
         {
             OnMessageReceived = context =>
             {
-                if (context.Request.Cookies.ContainsKey("TravelAccessToken"))
+                // Check for token in Authorization header (for Postman)
+                var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
+                if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer "))
+                {
+                    context.Token = authHeader.Substring("Bearer ".Length).Trim();
+                }
+                // Fallback to cookie (for frontend)
+                else if (context.Request.Cookies.ContainsKey("TravelAccessToken"))
                 {
                     context.Token = context.Request.Cookies["TravelAccessToken"];
                 }
@@ -58,16 +66,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+// Configure CORS to allow both frontend and Postman
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend", builder =>
+    options.AddPolicy("AllowFrontendAndPostman", builder =>
     {
-        builder.WithOrigins("http://localhost:8080") // Allow requests from the frontend origin
-               .AllowAnyMethod()                     // Allow GET, POST, etc.
-               .AllowAnyHeader();                    // Allow any headers (e.g., Content-Type)
+        builder
+            .WithOrigins("http://localhost:8080") // Allow frontend origin
+            .AllowAnyOrigin()                     // Allow all origins (for Postman in development)
+            .AllowAnyMethod()                     // Allow GET, POST, etc.
+            .AllowAnyHeader();                    // Allow any headers (e.g., Authorization, Content-Type)
     });
 });
 
+// Configure logging
 builder.Services.AddLogging(logging =>
 {
     logging.AddConsole();
@@ -76,28 +88,31 @@ builder.Services.AddLogging(logging =>
 
 var app = builder.Build();
 
-
-
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseDeveloperExceptionPage(); // Detailed error pages for development
+}
+else
+{
+    app.UseExceptionHandler(errorApp =>
+    {
+        errorApp.Run(async context =>
+        {
+            context.Response.StatusCode = 500;
+            context.Response.ContentType = "application/json";
+            await context.Response.WriteAsync("{\"error\": \"An unexpected error occurred.\"}");
+        });
+    });
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseRouting();
-app.UseCors("AllowFrontend");
+app.UseCors("AllowFrontendAndPostman");
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapStaticAssets();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
-
+app.MapControllers(); // Map API controllers (instead of MVC routing)
 
 app.Run();
