@@ -30,5 +30,11 @@ namespace backend.Controllers
             var result = await _flightService.SearchFlightsAsync(request);
             return Ok(result);
         }
+
+        [HttpPost("get-flight-details")]
+        public async Task<IActionResult> GetFlightDetails([FromBody] GetFlightDetailsRequest request){
+            var result = await _flightService.GetFlightDetailsAsync(request);
+            return Ok(result);
+        }
     }
 }
