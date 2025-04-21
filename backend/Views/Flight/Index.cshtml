@@ -1,7 +1,178 @@
+
+<!-- Views/Home/Index.cshtml -->
 @{
-    ViewData["Title"] = "Flight Page";
+    ViewData["Title"] = "Flight Search";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Flight Page</h1>
+<!-- Search Form -->
+<div class="search-bar">
+    <div class="search-container">
+        <div class="search-card">
+            <form id="flightSearchForm" onsubmit="searchFlights(event)">
+                <div class="search-grid">
+                    <!-- From Input -->
+                    <div class="relative">
+                        <i class="fas fa-map-marker-alt search-icon"></i>
+                        <input type="text" id="fromInput" name="from" placeholder="From"
+                            class="search-input" autocomplete="off" required>
+                        <div id="fromSuggestions" class="suggestions hidden"></div>
+                    </div>
+
+                    <!-- To Input -->
+                    <div class="relative">
+                        <i class="fas fa-map-marker-alt search-icon"></i>
+                        <input type="text" id="toInput" name="to" placeholder="To"
+                            class="search-input" autocomplete="off" required>
+                        <button type="button" class="swap-btn" onclick="swapLocations()">
+                            <i class="fas fa-exchange-alt"></i>
+                        </button>
+                        <div id="toSuggestions" class="suggestions hidden"></div>
+                    </div>
+
+                    <!-- Flight Type -->
+                    <select id="flightType" name="flightType" class="search-input" onchange="toggleReturnDate()">
+                        <option value="return">Return</option>
+                        <option value="oneway">One Way</option>
+                        <option value="multicity">Multi-city</option>
+                    </select>
+
+                    <!-- Departure Date -->
+                    <div class="relative">
+                        <i class="fas fa-calendar-alt search-icon"></i>
+                        <input type="text" id="departureDate" name="departureDate" placeholder="Departure Date"
+                            class="search-input" required>
+                    </div>
+
+                    <!-- Return Date -->
+                    <div id="returnDateContainer" class="relative">
+                        <i class="fas fa-calendar-alt search-icon"></i>
+                        <input type="text" id="returnDate" name="returnDate" placeholder="Return Date"
+                            class="search-input">
+                    </div>
+
+                    <!-- Travelers -->
+                    <div class="relative">
+                        <i class="fas fa-users search-icon"></i>
+                        <input type="text" id="travelersInput" placeholder="Travelers"
+                            class="search-input cursor-pointer" readonly onclick="toggleTravelerDropdown()">
+                        <div id="travelersDropdown" class="suggestions hidden">
+                            <div class="p-4">
+                                <div class="flex justify-between items-center mb-2">
+                                    <label for="adults" class="text-gray-700">Adults</label>
+                                    <div class="flex items-center">
+                                        <button type="button" onclick="updateTravelers('adults', -1)"
+                                            class="px-2 py-1 bg-gray-200 rounded">-</button>
+                                        <input type="number" id="adults" name="adults" value="1" min="1"
+                                            class="w-12 mx-2 text-center border border-gray-300 rounded" readonly>
+                                        <button type="button" onclick="updateTravelers('adults', 1)"
+                                            class="px-2 py-1 bg-gray-200 rounded">+</button>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <label for="children" class="text-gray-700">Children</label>
+                                    <div class="flex items-center">
+                                        <button type="button" onclick="updateTravelers('children', -1)"
+                                            class="px-2 py-1 bg-gray-200 rounded">-</button>
+                                        <input type="number" id="children" name="children" value="0" min="0"
+                                            class="w-12 mx-2 text-center border border-gray-300 rounded" readonly>
+                                        <button type="button" onclick="updateTravelers('children', 1)"
+                                            class="px-2 py-1 bg-gray-200 rounded">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Search Button -->
+                    <button type="submit" class="select-btn">
+                        Search
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="main-container m-3">
+    <!-- Filters Sidebar -->
+    <div class="filters-sidebar">
+        <div class="filter-section">
+            <h3 class="filter-title">Price Range</h3>
+            <input type="range" class="price-range" min="0" max="5000" step="100" value="5000">
+            <div class="price-labels">
+                <span>$0</span>
+                <span>$5000</span>
+            </div>
+        </div>
+        
+        <div class="filter-section">
+            <h3 class="filter-title">Stops</h3>
+            <div class="filter-option">
+                <input type="checkbox" id="nonstop" name="stops" value="0" checked>
+                <label for="nonstop">Non-stop</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="onestop" name="stops" value="1" checked>
+                <label for="onestop">1 Stop</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="twostops" name="stops" value="2" checked>
+                <label for="twostops">2+ Stops</label>
+            </div>
+        </div>
+        
+        <div class="filter-section">
+            <h3 class="filter-title">Airlines</h3>
+            <div class="filter-option">
+                <input type="checkbox" id="airline1" name="airlines" value="delta" checked>
+                <label for="airline1">Delta</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="airline2" name="airlines" value="united" checked>
+                <label for="airline2">United</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="airline3" name="airlines" value="american" checked>
+                <label for="airline3">American</label>
+            </div>
+        </div>
+        
+        <div class="filter-section">
+            <h3 class="filter-title">Departure Time</h3>
+            <div class="filter-option">
+                <input type="checkbox" id="morning" name="departureTime" value="morning" checked>
+                <label for="morning">Morning (6am-12pm)</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="afternoon" name="departureTime" value="afternoon" checked>
+                <label for="afternoon">Afternoon (12pm-6pm)</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="evening" name="departureTime" value="evening" checked>
+                <label for="evening">Evening (6pm-12am)</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="night" name="departureTime" value="night" checked>
+                <label for="night">Night (12am-6am)</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flight Results -->
+    <div class="flight-results">
+        <div class="results-header">
+            <h2>Flight Results</h2>
+            <div class="sort-options">
+                <button class="sort-btn active">Best</button>
+                <button class="sort-btn">Price</button>
+                <button class="sort-btn">Duration</button>
+                <button class="sort-btn">Departure</button>
+            </div>
+        </div>
+
+        <div id="flight-result">
+            <!-- Flight results will be inserted here by JavaScript -->
+        </div>
+    </div>
 </div>

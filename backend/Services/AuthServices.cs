@@ -6,44 +6,16 @@ using MongoDB.Driver.Linq;
 
 namespace backend.Services
 {
-    /// <summary>
-    /// Defines the contract for authentication-related operations.
-    /// </summary>
+
     public interface IAuthService
     {
-        /// <summary>
-        /// Registers a new user with the provided registration details.
-        /// </summary>
-        /// <param name="model">The registration details including username, password, and email.</param>
-        /// <returns>The newly registered user.</returns>
         Task<User> RegisterAsync(RegisterModel model);
-
-        /// <summary>
-        /// Authenticates a user and generates access and refresh tokens.
-        /// </summary>
-        /// <param name="model">The login credentials including username and password.</param>
-        /// <returns>An authentication response with tokens and expiration details.</returns>
         Task<AuthResponse> LoginAsync(LoginModel model);
-
-        /// <summary>
-        /// Refreshes an expired access token using a refresh token.
-        /// </summary>
-        /// <param name="accessToken">The expired access token to refresh.</param>
-        /// <param name="refreshToken">The refresh token used to authenticate the request.</param>
-        /// <returns>A new authentication response with updated tokens.</returns>
         Task<AuthResponse> RefreshTokenAsync(string accessToken, string refreshToken);
-
-        /// <summary>
-        /// Retrieves a user by their username from the database.
-        /// </summary>
-        /// <param name="username">The username of the user to retrieve.</param>
-        /// <returns>The user object, or null if not found.</returns>
         Task<User> GetUserByUsernameAsync(string username);
     }
 
-    /// <summary>
-    /// Implements authentication-related operations, including user registration, login, token refresh, and user retrieval.
-    /// </summary>
+  
     public class AuthService : IAuthService
     {
         private readonly IMongoDbService _mongoDbService;
@@ -51,13 +23,6 @@ namespace backend.Services
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthService> _logger;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AuthService"/> class with dependency injection.
-        /// </summary>
-        /// <param name="mongoDbService">The service for interacting with MongoDB.</param>
-        /// <param name="tokenService">The service for generating and validating tokens.</param>
-        /// <param name="configuration">The configuration settings for JWT and other parameters.</param>
-        /// <param name="logger">The logger for recording service events.</param>
         public AuthService(
             IMongoDbService mongoDbService,
             ITokenService tokenService,
@@ -70,12 +35,6 @@ namespace backend.Services
             _logger = logger;
         }
 
-        /// <summary>
-        /// Registers a new user in the system, hashing their password and storing their details.
-        /// </summary>
-        /// <param name="model">The registration details including username, password, and email.</param>
-        /// <returns>The newly created user object.</returns>
-        /// <exception cref="Exception">Thrown if the username or email already exists.</exception>
         public async Task<User> RegisterAsync(RegisterModel model)
         {
             var existingUser = await _mongoDbService.User
@@ -104,12 +63,6 @@ namespace backend.Services
             return newUser;
         }
 
-        /// <summary>
-        /// Authenticates a user with their credentials and issues access and refresh tokens.
-        /// </summary>
-        /// <param name="model">The login credentials including username and password.</param>
-        /// <returns>An authentication response containing access token, refresh token, and expiration.</returns>
-        /// <exception cref="UnauthorizedAccessException">Thrown if the username or password is invalid.</exception>
         public async Task<AuthResponse> LoginAsync(LoginModel model)
         {
             var user = await _mongoDbService.User
@@ -147,13 +100,6 @@ namespace backend.Services
             };
         }
 
-        /// <summary>
-        /// Refreshes an expired access token using a valid refresh token, issuing new tokens.
-        /// </summary>
-        /// <param name="accessToken">The expired access token to refresh.</param>
-        /// <param name="refreshToken">The refresh token to validate the request.</param>
-        /// <returns>A new authentication response with updated tokens.</returns>
-        /// <exception cref="SecurityTokenException">Thrown if the access token or refresh token is invalid.</exception>
         public async Task<AuthResponse> RefreshTokenAsync(string accessToken, string refreshToken)
         {
             var principal = _tokenService.GetPrincipalFromExpiredToken(accessToken);
@@ -200,11 +146,6 @@ namespace backend.Services
             };
         }
 
-        /// <summary>
-        /// Retrieves a user from the database by their username.
-        /// </summary>
-        /// <param name="username">The username of the user to find.</param>
-        /// <returns>The user object if found, otherwise null.</returns>
         public async Task<User> GetUserByUsernameAsync(string username)
         {
             var user = await _mongoDbService.User

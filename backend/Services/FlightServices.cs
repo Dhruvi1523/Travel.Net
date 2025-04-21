@@ -9,24 +9,16 @@ using backend.Models;
 
 namespace backend.Services
 {
-    /// <summary>
-    /// Defines the contract for flight-related operations, focusing on airport searches.
-    /// </summary>
+    
     public interface IFlightService
     {
-        /// <summary>
-        /// Searches for airports and cities based on a query using the Sky Scrapper API for autocomplete purposes.
-        /// </summary>
-        /// <param name="query">The search term (e.g., "new" for New York airports).</param>
-        /// <returns>A JSON string containing an API response with a list of matching entities for autocomplete, or an error message.</returns>
+        
         Task<string> SearchAirportAsync(string query);
         Task<string> SearchFlightsAsync(SearchFlightsRequest request);
         Task<string> GetFlightDetailsAsync(GetFlightDetailsRequest request);
     }
 
-    /// <summary>
-    /// Implements flight-related services, including searching airports via the Sky Scrapper API.
-    /// </summary>
+ 
     public class FlightService : IFlightService
     {
         private readonly HttpClient _httpClient;
@@ -37,14 +29,6 @@ namespace backend.Services
         private readonly string Currency = "INR";
         private readonly string Locale = "en-GB";
 
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FlightService"/> class with the specified dependencies.
-        /// </summary>
-        /// <param name="httpClient">The HTTP client used to make requests to the Sky Scrapper API.</param>
-        /// <param name="configuration">The configuration provider for accessing application settings.</param>
-        /// <param name="logger">The logger for logging information, warnings, and errors.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="httpClient"/>, <paramref name="configuration"/>, or <paramref name="logger"/> is null.</exception>
         public FlightService(HttpClient httpClient, IConfiguration configuration, ILogger<FlightService> logger)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));

@@ -6,21 +6,24 @@ using Microsoft.IdentityModel.Tokens;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers(); // Use AddControllers() for a Web API (instead of AddControllersWithViews)
+builder.Services.AddControllersWithViews(); // Use AddControllers() for a Web API (instead of AddControllersWithViews)
 
 builder.Services.AddScoped<IMongoDbService, MongoDbService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
 // Configure HttpClient for AirScrapper API
-builder.Services.AddHttpClient("AirScrapperClient", client =>
-{
-    var flightApiConfig = builder.Configuration.GetSection("AirScrapperApi");
-    client.BaseAddress = new Uri(flightApiConfig["BaseUrl"]);
-    client.DefaultRequestHeaders.Add("X-RapidAPI-Key", flightApiConfig["ApiKey"]);
-    client.DefaultRequestHeaders.Add("X-RapidAPI-Host", flightApiConfig["ApiHost"]);
-    client.Timeout = TimeSpan.FromSeconds(30);
-});
+builder.Services.AddHttpClient(
+    "AirScrapperClient",
+    client =>
+    {
+        var flightApiConfig = builder.Configuration.GetSection("AirScrapperApi");
+        client.BaseAddress = new Uri(flightApiConfig["BaseUrl"]);
+        client.DefaultRequestHeaders.Add("X-RapidAPI-Key", flightApiConfig["ApiKey"]);
+        client.DefaultRequestHeaders.Add("X-RapidAPI-Host", flightApiConfig["ApiHost"]);
+        client.Timeout = TimeSpan.FromSeconds(30);
+    }
+);
 
 builder.Services.AddScoped<IFlightService, FlightService>(sp =>
 {
@@ -31,8 +34,8 @@ builder.Services.AddScoped<IFlightService, FlightService>(sp =>
     return new FlightService(httpClient, configuration, logger);
 });
 
-// Configure JWT Authentication
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder
+    .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.Events = new JwtBearerEvents
@@ -51,7 +54,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     context.Token = context.Request.Cookies["TravelAccessToken"];
                 }
                 return Task.CompletedTask;
-            }
+            },
         };
         options.TokenValidationParameters = new TokenValidationParameters
         {
@@ -62,21 +65,25 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])
+            ),
         };
     });
 
 // Configure CORS to allow both frontend and Postman
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontendAndPostman", builder =>
-    {
-        builder
-            .WithOrigins("http://localhost:8080") // Allow frontend origin
-            .AllowAnyOrigin()                     // Allow all origins (for Postman in development)
-            .AllowAnyMethod()                     // Allow GET, POST, etc.
-            .AllowAnyHeader();                    // Allow any headers (e.g., Authorization, Content-Type)
-    });
+    options.AddPolicy(
+        "AllowFrontendAndPostman",
+        builder =>
+        {
+            builder
+                .WithOrigins("http://localhost:8080") // Allow frontend origin
+                .AllowAnyOrigin() // Allow all origins (for Postman in development)
+                .AllowAnyMethod() // Allow GET, POST, etc.
+                .AllowAnyHeader(); // Allow any headers (e.g., Authorization, Content-Type)
+        }
+    );
 });
 
 // Configure logging
@@ -107,6 +114,22 @@ else
     app.UseHsts();
 }
 
+app.UseStaticFiles(
+    new StaticFileOptions
+    {
+        OnPrepareResponse = ctx =>
+        {
+            if (app.Environment.IsDevelopment())
+            {
+                // Disable caching in development
+                ctx.Context.Response.Headers["Cache-Control"] =
+                    "no-cache, no-store, must-revalidate";
+                ctx.Context.Response.Headers["Pragma"] = "no-cache";
+                ctx.Context.Response.Headers["Expires"] = "0";
+            }
+        },
+    }
+);
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseCors("AllowFrontendAndPostman");
