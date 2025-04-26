@@ -26,8 +26,8 @@ namespace backend.Hotel.Controllers
                 var request = new HttpRequestMessage(HttpMethod.Get,
                     $"https://booking-com.p.rapidapi.com/v1/hotels/locations?locale=en-gb&name={Uri.EscapeDataString(query)}");
 
-                request.Headers.Add("X-RapidAPI-Host", "booking-com.p.rapidapi.com");
-                request.Headers.Add("X-RapidAPI-Key", "f108f7264cmsh98b32fd0fa26d1cp1a558ejsn2eae95ea3358");
+                request.Headers.Add("x-rapidapi-host", "booking-com.p.rapidapi.com");
+                request.Headers.Add("x-rapidapi-key", "11ada81770msh49c3dd7cea3fe53p178a8cjsn1e0020aab805");
 
                 var response = await client.SendAsync(request);
 
