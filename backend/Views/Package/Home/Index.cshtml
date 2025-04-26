@@ -1,0 +1,118 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Package/Shared/_Layout.cshtml";
+}
+
+<div class="container my-5">
+    <div class="row" id="destinationGrid">
+        <!-- Dynamic cards will be injected here -->
+    </div>
+
+    <!-- Pagination -->
+    <div class="d-flex justify-content-center align-items-center my-4">
+        <button class="btn btn-primary mx-2" onclick="changePage(-1)">&#10094;</button>
+        <span id="pageNumbers" class="d-flex"></span>
+        <button class="btn btn-primary mx-2" onclick="changePage(1)">&#10095;</button>
+    </div>
+</div>
+
+<script> 
+// Example search button alert (if you have a search-btn somewhere)
+const searchBtn = document.querySelector('.search-btn');
+if (searchBtn) {
+    searchBtn.addEventListener('click', function() {
+        alert('Search functionality will be implemented soon!');
+    });
+}
+
+console.log("hi package");
+
+const destinations = [
+    { img: "/imagesP/kerala.jpg", name: "Kerala", price: "₹20,000", rating: "5.0" },
+    { img: "/imagesP/shimla.jpg", name: "Shimla", price: "₹15,000", rating: "4.9" },
+    { img: "/imagesP/goa.jpg", name: "Goa", price: "₹30,000", rating: "4.9" },
+    { img: "/imagesP/manali.jpg", name: "Manali", price: "₹11,000", rating: "4.2" },
+    { img: "/imagesP/himachal.jpg", name: "Himachal", price: "₹17,000", rating: "4.9" },
+    { img: "/imagesP/kashmir.jpg", name: "Kashmir", price: "₹35,000", rating: "4.5" },
+    { img: "/imagesP/rajasthan.jpg", name: "Rajasthan", price: "₹16,000", rating: "4.9" },
+    { img: "/imagesP/udaipur.jpg", name: "Udaipur", price: "₹25,000", rating: "4.6" },
+    { img: "/imagesP/ladakh.jpg", name: "Ladakh", price: "₹15,000", rating: "4.7" },
+    { img: "/imagesP/mysore.jpg", name: "Mysore", price: "₹18,000", rating: "4.8" },
+    { img: "/imagesP/ooty.jpg", name: "Ooty", price: "₹22,000", rating: "4.7" },
+    { img: "/imagesP/darjeeling.jpg", name: "Darjeeling", price: "₹19,000", rating: "4.6" }
+];
+
+const itemsPerPage = 6;
+let currentPage = 1;
+
+function renderDestinations() {
+    const grid = document.getElementById("destinationGrid");
+    grid.innerHTML = "";
+    
+    let start = (currentPage - 1) * itemsPerPage;
+    let end = start + itemsPerPage;
+    
+    let paginatedItems = destinations.slice(start, end);
+
+    paginatedItems.forEach(destination => {
+        const col = document.createElement("div");
+        col.classList.add("col-md-4", "mb-4");
+
+        col.innerHTML = `
+            <div class="card h-100 shadow-sm">
+                <img src="${destination.img}" class="card-img-top" alt="${destination.name}" style="height: 200px; object-fit: cover;">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h5 class="card-title">${destination.name}</h5>
+                    <p class="card-text">Starting At ${destination.price} Per Person</p>
+                    <div class="rating mt-auto">
+                        <span>⭐ ${destination.rating}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        grid.appendChild(col);
+    });
+
+    updatePagination();
+}
+
+function updatePagination() {
+    const pageNumbers = document.getElementById("pageNumbers");
+    pageNumbers.innerHTML = "";
+    
+    const totalPages = Math.ceil(destinations.length / itemsPerPage);
+    
+    for (let i = 1; i <= totalPages; i++) {
+        let pageBtn = document.createElement("button");
+        pageBtn.textContent = i;
+        pageBtn.classList.add("btn", "btn-outline-primary", "mx-1");
+
+        if (i === currentPage) {
+            pageBtn.classList.add("active");
+            pageBtn.style.fontWeight = "bold";
+            pageBtn.style.color = "red";
+        }
+        
+        pageBtn.onclick = () => {
+            currentPage = i;
+            renderDestinations();
+        };
+
+        pageNumbers.appendChild(pageBtn);
+    }
+}
+
+function changePage(step) {
+    const totalPages = Math.ceil(destinations.length / itemsPerPage);
+    
+    if (currentPage + step > 0 && currentPage + step <= totalPages) {
+        currentPage += step;
+        renderDestinations();
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    renderDestinations();
+});
+</script>

@@ -1,0 +1,206 @@
+[
+    {
+      "Id": "kerala",
+      "Title": "4N - Most Wanted Kerala Package",
+      "Duration": "4N/5D",
+      "Itinerary": "2N Munnar • 1N Thekkady • 1N Alleppey",
+      "Price": 17311,
+      "OriginalPrice": 20102,
+      "DiscountLabel": "14% OFF",
+      "Hotel": "3-Star Hotels, Private Transfers, Meals Included",
+      "ImageUrl": "/images/kerala.jpg",
+      "DayPlan": [
+        {
+          "Day": "Day 1",
+          "Activity": "Arrival at Cochin, private transfer to Munnar, on-route sightseeing, hotel check-in.",
+          "Meal": "Lunch",
+          "Transfers": "Cochin to Munnar via private AC car (3 seater)"
+        },
+        {
+          "Day": "Day 2",
+          "Activity": "Munnar sightseeing: Eravikulam National Park, Mattupetty Dam, Tea Museum.",
+          "Meal": "Breakfast & Dinner",
+          "Transfers": "Local sightseeing in private car"
+        },
+        {
+          "Day": "Day 3",
+          "Activity": "Drive to Thekkady. Visit Periyar Wildlife Sanctuary and spice garden. Optional cultural shows.",
+          "Meal": "Breakfast",
+          "Transfers": "Munnar to Thekkady"
+        },
+        {
+          "Day": "Day 4",
+          "Activity": "Transfer to Alleppey. Houseboat cruise, relaxing day on backwaters.",
+          "Meal": "Lunch & Dinner",
+          "Transfers": "Thekkady to Alleppey + houseboat cruise"
+        },
+        {
+          "Day": "Day 5",
+          "Activity": "Checkout from Alleppey houseboat, transfer to Cochin for departure.",
+          "Meal": "Breakfast",
+          "Transfers": "Alleppey to Cochin"
+        }
+      ]
+    },
+    {
+      "Id": "shimla",
+      "Title": "Scenic Shimla Tour",
+      "Duration": "3N/4D",
+      "Itinerary": "3N Shimla",
+      "Price": 15999,
+      "OriginalPrice": 18999,
+      "DiscountLabel": "15% OFF",
+      "Hotel": "Deluxe Stay + Transfers + Activities",
+      "ImageUrl": "/images/shimla.jpg",
+      "DayPlan": [
+        {
+          "Day": "Day 1",
+          "Activity": "Arrive in Shimla. Mall Road visit and leisure time.",
+          "Meal": "Dinner",
+          "Transfers": "Private transfer from bus station to hotel"
+        },
+        {
+          "Day": "Day 2",
+          "Activity": "Visit Kufri, Himalayan Zoo, and adventure park.",
+          "Meal": "Breakfast & Dinner",
+          "Transfers": "Local sightseeing"
+        },
+        {
+          "Day": "Day 3",
+          "Activity": "Shimla city tour – Ridge, Christ Church, Jakhoo Temple.",
+          "Meal": "Breakfast & Lunch"
+        },
+        {
+          "Day": "Day 4",
+          "Activity": "Free time for shopping. Return journey.",
+          "Meal": "Breakfast"
+        }
+      ]
+    },
+    {
+      "Id": "goa",
+      "Title": "Goa Beaches Explorer",
+      "Duration": "4N/5D",
+      "Itinerary": "2N North Goa • 2N South Goa",
+      "Price": 29999,
+      "OriginalPrice": 34999,
+      "DiscountLabel": "₹5,000 OFF",
+      "Hotel": "Beach Hotels + All Sightseeing",
+      "ImageUrl": "/images/goa.jpg",
+      "DayPlan": [
+        {
+          "Day": "Day 1",
+          "Activity": "Arrive in Goa. Leisure at Calangute Beach.",
+          "Meal": "Dinner"
+        },
+        {
+          "Day": "Day 2",
+          "Activity": "North Goa Tour: Fort Aguada, Baga Beach, Anjuna.",
+          "Meal": "Breakfast & Dinner"
+        },
+        {
+          "Day": "Day 3",
+          "Activity": "South Goa tour: Palolem Beach, Colva Beach.",
+          "Meal": "Breakfast & Lunch"
+        },
+        {
+          "Day": "Day 4",
+          "Activity": "Old Goa churches and Mandovi River Cruise.",
+          "Meal": "Dinner"
+        },
+        {
+          "Day": "Day 5",
+          "Activity": "Check out and transfer to airport/station.",
+          "Meal": "Breakfast"
+        }
+      ]
+    },
+    {
+      "Id": "delhi",
+      "Title": "Delhi Heritage Trail",
+      "Duration": "2N/3D",
+      "Itinerary": "2N Delhi",
+      "Price": 9999,
+      "OriginalPrice": 12999,
+      "DiscountLabel": "23% OFF",
+      "Hotel": "Central Stay + Sightseeing",
+      "ImageUrl": "/images/delhi.jpg",
+      "DayPlan": [
+        { "Day": "Day 1", "Activity": "Arrival in Delhi, India Gate, and Red Fort visit.", "Meal": "Dinner" },
+        { "Day": "Day 2", "Activity": "Qutub Minar, Lotus Temple, and shopping at Connaught Place.", "Meal": "Breakfast & Lunch" },
+        { "Day": "Day 3", "Activity": "Checkout and drop at airport.", "Meal": "Breakfast" }
+      ]
+    },
+    {
+      "Id": "rajasthan",
+      "Title": "Rajasthan Royal Trail",
+      "Duration": "5N/6D",
+      "Itinerary": "Jaipur • Jodhpur • Udaipur",
+      "Price": 28000,
+      "OriginalPrice": 32000,
+      "DiscountLabel": "₹4,000 OFF",
+      "Hotel": "Royal Heritage Hotels",
+      "ImageUrl": "/images/rajasthan.jpg",
+      "DayPlan": [
+        { "Day": "Day 1", "Activity": "Arrive in Jaipur, Hawa Mahal and City Palace.", "Meal": "Dinner" },
+        { "Day": "Day 2", "Activity": "Amber Fort, local bazaars, drive to Jodhpur.", "Meal": "Breakfast & Lunch" },
+        { "Day": "Day 3", "Activity": "Mehrangarh Fort, Jaswant Thada.", "Meal": "Breakfast" },
+        { "Day": "Day 4", "Activity": "Drive to Udaipur, visit Lake Pichola.", "Meal": "Lunch" },
+        { "Day": "Day 5", "Activity": "City Palace, Jagdish Temple.", "Meal": "Breakfast" },
+        { "Day": "Day 6", "Activity": "Checkout and return.", "Meal": "Breakfast" }
+      ]
+    },
+    {
+      "Id": "himachal",
+      "Title": "Himachal Wonders",
+      "Duration": "5N/6D",
+      "Itinerary": "Shimla • Manali",
+      "Price": 24500,
+      "OriginalPrice": 27500,
+      "DiscountLabel": "11% OFF",
+      "Hotel": "Hillside Hotels + Volvo Transfers",
+      "ImageUrl": "/images/himachal.jpg",
+      "DayPlan": [
+        { "Day": "Day 1", "Activity": "Delhi to Shimla by Volvo. Hotel check-in.", "Meal": "Dinner" },
+        { "Day": "Day 2", "Activity": "Shimla sightseeing: Kufri, Mall Road.", "Meal": "Breakfast & Dinner" },
+        { "Day": "Day 3", "Activity": "Travel to Manali.", "Meal": "Breakfast & Lunch" },
+        { "Day": "Day 4", "Activity": "Solang Valley activities.", "Meal": "Breakfast" },
+        { "Day": "Day 5", "Activity": "Rohtang Pass (permit based).", "Meal": "Lunch" },
+        { "Day": "Day 6", "Activity": "Return to Delhi.", "Meal": "Breakfast" }
+      ]
+    },
+    {
+      "Id": "jaipur",
+      "Title": "Jaipur Pink City Special",
+      "Duration": "2N/3D",
+      "Itinerary": "2N Jaipur",
+      "Price": 13500,
+      "OriginalPrice": 16000,
+      "DiscountLabel": "15% OFF",
+      "Hotel": "Boutique Haveli + Guide",
+      "ImageUrl": "/images/jaipur.jpg",
+      "DayPlan": [
+        { "Day": "Day 1", "Activity": "Arrival in Jaipur. City Palace and Hawa Mahal.", "Meal": "Dinner" },
+        { "Day": "Day 2", "Activity": "Amber Fort, Jal Mahal, Bapu Bazaar.", "Meal": "Breakfast & Lunch" },
+        { "Day": "Day 3", "Activity": "Checkout and airport drop.", "Meal": "Breakfast" }
+      ]
+    },
+    {
+      "Id": "ooty",
+      "Title": "Ooty & Nilgiri Hills",
+      "Duration": "3N/4D",
+      "Itinerary": "3N Ooty",
+      "Price": 16000,
+      "OriginalPrice": 18500,
+      "DiscountLabel": "₹2,500 OFF",
+      "Hotel": "Hill Resort Stay",
+      "ImageUrl": "/images/ooty.jpg",
+      "DayPlan": [
+        { "Day": "Day 1", "Activity": "Arrival in Ooty. Relax at hotel.", "Meal": "Dinner" },
+        { "Day": "Day 2", "Activity": "Visit Ooty Lake, Botanical Gardens.", "Meal": "Breakfast & Lunch" },
+        { "Day": "Day 3", "Activity": "Excursion to Coonoor: Sim's Park, Dolphin's Nose.", "Meal": "Breakfast & Dinner" },
+        { "Day": "Day 4", "Activity": "Checkout and departure.", "Meal": "Breakfast" }
+      ]
+    }
+  ]
+  

@@ -1,0 +1,105 @@
+[
+    {
+      "Id": "chardham",
+      "Title": "Char Dham Yatra",
+      "Duration": "7N/8D",
+      "Itinerary": "2N Yamunotri • 2N Gangotri • 2N Kedarnath • 1N Badrinath",
+      "Price": 33956,
+      "OriginalPrice": 38956,
+      "DiscountLabel": "13% OFF",
+      "Hotel": "Budget Hotels, Shared Transfers, Meals Included",
+      "ImageUrl": "/images/chardham.jpg",
+      "DayPlan": [
+        { "Day": "Day 1", "Activity": "Arrival at Haridwar, transfer to Barkot", "Meal": "Dinner" },
+        { "Day": "Day 2", "Activity": "Trek to Yamunotri and return", "Meal": "Breakfast & Lunch" },
+        { "Day": "Day 3", "Activity": "Drive to Uttarkashi", "Meal": "Dinner" },
+        { "Day": "Day 4", "Activity": "Visit Gangotri and return", "Meal": "Breakfast" },
+        { "Day": "Day 5", "Activity": "Travel to Guptkashi", "Meal": "Lunch & Dinner" },
+        { "Day": "Day 6", "Activity": "Kedarnath trek and darshan", "Meal": "Breakfast" },
+        { "Day": "Day 7", "Activity": "Visit Badrinath temple", "Meal": "Dinner" },
+        { "Day": "Day 8", "Activity": "Departure from Haridwar", "Meal": "Breakfast" }
+      ]
+    },
+    {
+      "Id": "varanasi",
+      "Title": "Varanasi Spiritual Tour",
+      "Duration": "3N/4D",
+      "Itinerary": "3N Varanasi",
+      "Price": 7190,
+      "OriginalPrice": 8190,
+      "DiscountLabel": "12% OFF",
+      "Hotel": "Standard Stay, Transfers, Sightseeing",
+      "ImageUrl": "/images/varanasi.jpg",
+      "DayPlan": [
+        { "Day": "Day 1", "Activity": "Arrival and Ganga Aarti at Dashashwamedh Ghat", "Meal": "Dinner" },
+        { "Day": "Day 2", "Activity": "Kashi Vishwanath Temple, Sarnath visit", "Meal": "Breakfast" },
+        { "Day": "Day 3", "Activity": "Boat ride, Silk weaving center", "Meal": "Lunch" },
+        { "Day": "Day 4", "Activity": "Free time and departure", "Meal": "Breakfast" }
+      ]
+    },
+    {
+      "Id": "mathura",
+      "Title": "Mathura Vrindavan Darshan",
+      "Duration": "2N/3D",
+      "Itinerary": "1N Mathura • 1N Vrindavan",
+      "Price": 5599,
+      "OriginalPrice": 6499,
+      "DiscountLabel": "14% OFF",
+      "Hotel": "Lodges & Guest Houses, Local Transfers",
+      "ImageUrl": "/images/mathura.jpg",
+      "DayPlan": [
+        { "Day": "Day 1", "Activity": "Arrival and visit Krishna Janmabhoomi", "Meal": "Dinner" },
+        { "Day": "Day 2", "Activity": "Travel to Vrindavan: Banke Bihari and ISKCON Temple", "Meal": "Breakfast & Lunch" },
+        { "Day": "Day 3", "Activity": "Yamuna Ghat visit, departure", "Meal": "Breakfast" }
+      ]
+    },
+    {
+      "Id": "vrindavan",
+      "Title": "Vrindavan Krishna Bhakti Tour",
+      "Duration": "2N/3D",
+      "Itinerary": "2N Vrindavan",
+      "Price": 4890,
+      "OriginalPrice": 5790,
+      "DiscountLabel": "16% OFF",
+      "Hotel": "Ashrams, Budget Hotels, Local Transfers",
+      "ImageUrl": "/images/vrindavan.jpg",
+      "DayPlan": [
+        { "Day": "Day 1", "Activity": "Arrival and evening Aarti at ISKCON", "Meal": "Dinner" },
+        { "Day": "Day 2", "Activity": "Visit Banke Bihari, Nidhivan, Prem Mandir", "Meal": "Breakfast" },
+        { "Day": "Day 3", "Activity": "Free time & return journey", "Meal": "Breakfast" }
+      ]
+    },
+    {
+      "Id": "amritsar",
+      "Title": "Golden Amritsar Tour",
+      "Duration": "2N/3D",
+      "Itinerary": "2N Amritsar",
+      "Price": 6384,
+      "OriginalPrice": 7384,
+      "DiscountLabel": "13% OFF",
+      "Hotel": "Central Stay, City Tour Included",
+      "ImageUrl": "/images/amritsar.jpg",
+      "DayPlan": [
+        { "Day": "Day 1", "Activity": "Arrival and visit Wagah Border", "Meal": "Dinner" },
+        { "Day": "Day 2", "Activity": "Golden Temple, Jallianwala Bagh, local food walk", "Meal": "Breakfast" },
+        { "Day": "Day 3", "Activity": "Shopping & departure", "Meal": "Breakfast" }
+      ]
+    },
+    {
+      "Id": "puri",
+      "Title": "Spiritual Puri Yatra",
+      "Duration": "3N/4D",
+      "Itinerary": "2N Puri • 1N Bhubaneswar",
+      "Price": 13348,
+      "OriginalPrice": 14990,
+      "DiscountLabel": "11% OFF",
+      "Hotel": "3-Star Hotels, Temple Guide, AC Transfers",
+      "ImageUrl": "/images/puri.jpg",
+      "DayPlan": [
+        { "Day": "Day 1", "Activity": "Arrival in Puri and visit Jagannatha Temple", "Meal": "Lunch" },
+        { "Day": "Day 2", "Activity": "Chilika Lake boating and Konark Sun Temple", "Meal": "Breakfast & Dinner" },
+        { "Day": "Day 3", "Activity": "Drive to Bhubaneswar, Lingaraj Temple", "Meal": "Breakfast" },
+        { "Day": "Day 4", "Activity": "Check-out and departure", "Meal": "Breakfast" }
+      ]
+    }
+  ]

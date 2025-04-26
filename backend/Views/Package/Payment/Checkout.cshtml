@@ -1,0 +1,26 @@
+@model backend.Package.Models.TourPackage
+
+<div class="container mt-5">
+    <h2>Confirm Your Booking</h2>
+    <hr />
+    <p><strong>Package:</strong> @Model.Title</p>
+    <p><strong>Duration:</strong> @Model.Duration</p>
+    <p><strong>Price:</strong> ₹@Model.Price</p>
+
+    <form method="post" action="@Url.Action("Confirm", "Payment")">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <div class="mb-3">
+            <label>Name*</label>
+            <input name="Name" required class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label>Phone*</label>
+            <input name="Phone" required class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label>Email*</label>
+            <input name="Email" type="email" required class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
