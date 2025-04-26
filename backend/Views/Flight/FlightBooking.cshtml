@@ -48,14 +48,14 @@
                     <div class="agent-name">@agent.Name</div>
                     <div class="agent-price">$@agent.Price</div>
                     <div class="agent-rating">⭐ @agent.RatingValue (@agent.RatingCount reviews)</div>
-
                     <form method="post" asp-controller="Book" asp-action="FillBookingForm">
                         <input type="hidden" name="agentId" value="@agent.Id" />
                         <input type="hidden" name="itineraryId" value="@Model.ItineraryId" />
                         <input type="hidden" name="bookingId" value="@Model.BookingSessionId" />
                         <input type="hidden" name="origin" value="@flight.Origin.CityName" />
                         <input type="hidden" name="destination" value="@flight.Destination.CityName" />
-                        <input type="hidden" name="flightDate" value="@flight.Arrival />
+                        <input type="hidden" name="flightDate" value="@flight.Arrival.ToString("yyyy-MM-dd")" />
+
                         <button type="submit" class="btn btn-primary">Book Now</button>
                     </form>
 
