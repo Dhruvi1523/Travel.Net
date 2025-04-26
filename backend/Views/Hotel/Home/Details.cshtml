@@ -1,0 +1,103 @@
+@model backend.Hotel.Models.HotelViewModel
+@using Newtonsoft.Json.Linq
+
+<div style="max-width: 900px; margin: auto; font-family: 'Segoe UI', sans-serif;">
+
+    <!-- Hotel Name -->
+    <h1 style="font-size: 28px; font-weight: bold;">@Model.Name</h1>
+
+    <!-- Image -->
+    <img src="@Model.ImageUrl" alt="Hotel Image" style="width: 500px; height:400px; border-radius: 10px; margin: 20px 0;" />
+
+    <!-- Quick Info -->
+    <p><strong>📍 Address:</strong> @Model.Address</p>
+    <p><strong>⭐ Rating:</strong> @Model.Rating (@Model.ReviewCount reviews)</p>
+    <p><strong>💵 Price:</strong> ₹ @Model.PricePerNight <span style="color: gray;">+ ₹180 taxes</span></p>
+
+    <!-- Highlight Badges -->
+    <div style="margin: 20px 0;">
+        <span style="background-color: #e8f5e9; color: #2e7d32; padding: 6px 12px; border-radius: 12px;">✔️ Free Cancellation</span>
+        <span style="background-color: #fce4ec; color: #ad1457; padding: 6px 12px; border-radius: 12px; margin-left: 10px;">🔥 Popular Pick</span>
+    </div>
+
+
+    <!-- Facilities -->
+    <h3>🏨 Information and Facilities</h3>
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; font-size: 16px; margin-bottom: 30px;">
+        <div>🏊 Swimming pool</div>
+        <div>📶 Wireless connectivity</div>
+        <div>🚼 No cribs (infant beds) available</div>
+        <div>🅿️ Parking</div>
+        <div>♿ Accessibility</div>
+        <div>🍽️ Restaurant</div>
+        <div>💻 Computer</div>
+        <div>🧺 Dry cleaning</div>
+        <div>🔔 Bell staff/porter</div>
+    </div>
+
+    <!-- Nearby Places -->
+    <h3>📍 Nearby Attractions</h3>
+    <ul>
+        <li>✅ 1.2 km to Calangute Beach</li>
+        <li>✅ 0.8 km to Max Shopping Mall</li>
+        <li>✅ 3.0 km to Goa Airport</li>
+    </ul>
+
+    <!-- Reviews -->
+    <h3>📝 Guest Reviews</h3>
+    <div style="border-top: 1px solid #ddd; padding-top: 10px;">
+        <p><strong>Rahul S.</strong> ⭐⭐⭐⭐</p>
+        <p>“Great stay, clean rooms and awesome staff. Will come again!”</p>
+    </div>
+    <div style="border-top: 1px solid #ddd; padding-top: 10px;">
+        <p><strong>Anjali P.</strong> ⭐⭐⭐⭐⭐</p>
+        <p>“Excellent location near beach and really good food!”</p>
+    </div>
+
+    <!-- Hotel Policies -->
+    <h3>📋 Hotel Policies</h3>
+    <ul>
+        <li>✔️ Check-in: 12:00 PM</li>
+        <li>✔️ Check-out: 11:00 AM</li>
+        <li>✔️ ID proof required</li>
+        <li>❌ Pets not allowed</li>
+    </ul>
+
+    <!-- FAQs -->
+    <h3>❓ FAQs</h3>
+    <details>
+        <summary>Does the hotel offer airport pickup?</summary>
+        <p>Yes, on request with extra charges.</p>
+    </details>
+    <details>
+        <summary>Is breakfast included in price?</summary>
+        <p>Only for Premium and Deluxe rooms.</p>
+    </details>
+
+    <!-- Booking Form -->
+    <form method="post" action="@Url.Action("Booking", "Hotel")">
+        <input type="hidden" name="HotelId" value="@Model.Id" />
+
+        <div class="container mt-5">
+            <h2>Confirm Your Booking</h2>
+            <hr />
+            <br>
+            <div class="mb-3">
+                <label>Name*</label>
+                <input name="Name" required class="form-control" />
+            </div><br>
+            <div class="mb-3">
+                <label>Phone*</label>
+                <input name="Phone" required class="form-control" />
+            </div><br>
+            <div class="mb-3">
+                <label>Email*</label>
+                <input name="Email" type="email" required class="form-control" />
+            </div>
+        </div>
+
+        <button type="submit" style="margin-top: 10px; background-color: #007bff; color: white; padding: 8px 16px; border: none; border-radius: 6px;">Book Now</button>
+    </form>
+
+</div>
+

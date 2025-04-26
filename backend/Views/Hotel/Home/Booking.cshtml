@@ -1,0 +1,21 @@
+@{
+    ViewData["Title"] = "Booking Confirmed";
+    Layout = "~/Views/Hotel/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5 text-center">
+    <h2 class="text-success mb-4">✅ Booking Confirmed!</h2>
+
+    @if (ViewBag.Message != null)
+    {
+        <p class="lead">@ViewBag.Message</p>
+        <p>Thank you for booking with us.</p>
+        <p>Our holiday expert will contact you soon!</p>
+    }
+    else
+    {
+        <p class="lead">Thank you for booking with us. Our holiday expert will contact you soon!</p>
+    }
+
+    <a href="@Url.Action("Index", "Hotel")" class="btn btn-primary mt-4">Back to Home</a>
+</div>

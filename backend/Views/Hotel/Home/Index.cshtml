@@ -1,0 +1,246 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@* @if (TempData["ErrorMessage"] != null)
+{
+    <div style="color:red">@TempData["ErrorMessage"]</div>
+} *@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Page</title>
+    <link rel="stylesheet" href="~/css/Hotel.css">
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header class="hero">
+        <nav class="navbar">
+            <div class="logo">Destiny Wander</div>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="./packagepage/index1.html">Upcoming Packages</a></li>
+            </ul>
+        </nav>
+        
+        <form method="get" action="api/Hotel/SearchCity" >
+            <div class="search-box">
+                <div class="search-item1">
+                    <label>LOCATION</label>
+                    <div class="input-group">
+                        <input type="text" name="location" id="searchBox" placeholder="Where do you want to stay?" required />
+                        <div class="suggestion-box" id="suggestions">
+                            <p class="search-title">Search: <strong id="searchQuery"></strong></p>
+                            <div id="popular-list"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-item">
+                    <label>CHECK-IN ▼</label>
+                    <input type="date" name="checkIn" required />
+                </div>
+
+                <div class="search-item">
+                    <label>CHECK-OUT ▼</label>
+                    <input type="date" name="checkOut" required />
+                </div>
+
+                <div class="search-item">
+                    <label>ROOMS ▼</label>
+                    <input type="number" name="rooms" min="1" max="5" required />
+                </div>
+
+                <div class="search-item2">
+                    <label>PRICE PER NIGHT ▼</label>
+                    <select name="priceRange" required>
+                        <option value="">Select</option>
+                        <option value="0-1500">₹0–₹1500</option>
+                        <option value="1500-2500">₹1500–₹2500</option>
+                        <option value="2500-5000">₹2500–₹5000</option>
+                        <option value="5000+">₹5000+</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <button class="search-btn" type="submit">SEARCH</button>
+        </form>
+
+    </header>
+
+
+
+    <!-- locationn -->
+
+    <div class="container">
+        <div class="destination-list">
+            <div class="destination">
+                <a href="@Url.Action("Goa", "Hotel")"><img src="~/images/goa.jpg" alt="Goa"></a>
+                <div class="info">
+                    <h3>GOA</h3>
+                    <p>HOTELS, BUDGET HOTELS, RESORTS, BEST HOTELS, NORTH GOA, VILLAS</p>
+                </div>
+            </div>
+            <div class="destination">
+                <a href="@Url.Action("Ooty", "Hotel")"><img src="~/images/ooty.jpg" alt="Ooty"></a>
+                <div class="info">
+                    <h3>OOTY</h3>
+                    <p>HOTELS, BUDGET HOTELS, RESORTS, BEST HOTELS, NORTH GOA, VILLAS</p>
+                </div>
+            </div>
+            <div class="destination">
+                <a href="@Url.Action("Manali", "Hotel")"><img src="~/images/manali.jpg" alt="Manali"></a>
+                <div class="info">
+                    <h3>MANALI</h3>
+                    <p>HOTELS, BUDGET HOTELS, RESORTS, BEST HOTELS, NORTH GOA, VILLAS</p>
+                </div>
+            </div>
+            <div class="destination">
+                <a href="@Url.Action("Jaipur", "Hotel")"><img src="~/images/jaipur.jpg" alt="Jaipur"></a>
+                <div class="info">
+                    <h3>JAIPUR</h3>
+                    <p>HOTELS, BUDGET HOTELS, RESORTS, BEST HOTELS, NORTH GOA, VILLAS</p>
+                </div>
+            </div>
+            <div class="destination">
+                <a href="@Url.Action("Mumbai", "Hotel")"><img src="~/images/mumbai.jpg" alt="Mumbai"></a>
+                <div class="info">
+                    <h3>MUMBAI</h3>
+                    <p>HOTELS, BUDGET HOTELS, RESORTS, BEST HOTELS, NORTH GOA, VILLAS</p>
+                </div>
+            </div>
+            <div class="destination">
+                <a href="@Url.Action("Delhi", "Hotel")"><img src="~/images/delhi.jpg" alt="Delhi"></a>
+                <div class="info">
+                    <h3>DELHI</h3>
+                    <p>HOTELS, BUDGET HOTELS, RESORTS, BEST HOTELS, NORTH GOA, VILLAS</p>
+                </div>
+            </div>
+            <div class="destination">
+                <a href="@Url.Action("Banglore", "Hotel")"><img src="~/images/bangalore.jpg" alt="Bangalore"></a>
+                <div class="info">
+                    <h3>BANGALORE</h3>
+                    <p>HOTELS, BUDGET HOTELS, RESORTS, BEST HOTELS, NORTH GOA, VILLAS</p>
+                </div>
+            </div>
+            <div class="destination">
+                <a href="@Url.Action("Shimla", "Hotel")"><img src="~/images/shimla.jpg" alt="Shimla"></a>
+                <div class="info">
+                    <h3>SHIMLA</h3>
+                    <p>HOTELS, BUDGET HOTELS, RESORTS, BEST HOTELS, NORTH GOA, VILLAS</p>
+                </div>
+            </div>
+            <div class="destination">
+                <a href="@Url.Action("Ujjain", "Hotel")"><img src="~/images/ujjain.jpg" alt="Ujjain"></a>
+                <div class="info">
+                    <h3>UJJAIN</h3>
+                    <p>HOTELS, BUDGET HOTELS, RESORTS, BEST HOTELS, NORTH GOA, VILLAS</p>
+                </div>
+            </div>
+            <div class="destination">
+                <a href="@Url.Action("Udaipur", "Hotel")"><img src="~/images/udaipur.jpg" alt="Udaipur"></a>
+                <div class="info">
+                    <h3>UDAIPUR</h3>
+                    <p>HOTELS, BUDGET HOTELS, RESORTS, BEST HOTELS, NORTH GOA, VILLAS</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- question -->
+
+    <div class="faq-container">
+        <div class="faq-row">
+            <!-- Left Column -->
+            <div class="faq-item">
+                <h3>Q. How to book a hotel ?</h3>
+                <p>
+                    A. Booking a hotel online is easy through this website. Tap on the Hotels section on the top left corner and enter the details of the city, the area or the hotel. Fill out the check-in and check-out dates, along with the other details and tap Search. Use the Sort & Filter options so that you can book one as per your convenience. You can also choose hotels according to user reviews and ratings. The same follows on our site.
+                </p>
+            </div>
+
+            <!-- Right Column -->
+            <div class="faq-item">
+                <h3>Q. How to find the cheapest hotel deals in any city?</h3>
+                <p>
+                    Being the best hotel-booking site in the country, offers several discounts on budget hotels as well. If you are looking for the cheapest hotels with amazing deals, you can tap on Sort & Filter option and drag down the Price option from Rs.0 to Rs.500 or from Rs.0 to Rs.1000. Choose from the various amenities you would need during your stay including access to Wi-Fi, room service and in-house restaurants. The list will first show you the cheapest one on top. You can also sort by prices from Low to High, scroll down the list and find your preferred ones with great discounts.
+                </p>
+            </div>
+        </div>
+
+        <hr class="divider1">
+
+        <div class="faq-row">
+            <!-- Left Column -->
+            <div class="faq-item">
+                <h3>Q. How to find the best hotels near me?</h3>
+                <p>
+                    A. If you are travelling to a city for the first time and are looking for hotels in the best areas, it is easy to find them on our website. Let’s say, you are going to Goa and planning to book one near the most happening beaches. Once you have hit the Search option, you will find a list of all the hotels in North Goa near the famed beach areas including Baga and Calangute. You can even find out which of the areas are ideal for couples and families. Similarly, if you are looking for booking hotels in Mumbai, you can either book ones that are near the city’s major business districts, tourist areas and transportation hubs.
+                </p>
+            </div>
+
+            <!-- Right Column -->
+            <div class="faq-item">
+                <h3>Q. Where can I find current deals and offers of MakeMyTrip?</h3>
+                <p>
+                    A. MakeMyTrip offers plenty of deals and offerson luxury and budget hotels in India in all the cities, on a daily basis. However, these are available for a limited time and they are subject to change the next day. You can look for these deals while you are about to book the hotel after narrowing down your choices. On the app, you can check a property that has ‘MMT Exclusive Deal’ button below its discounted rate. By tapping on it, you would know how many offers are available.
+                </p>
+            </div>
+        </div>
+    </div> 
+
+    <!-- footer -->
+
+    <footer class="footer">
+        <div class="footer-container">
+            <!-- Left Section -->
+            <div class="footer-brand">
+                <h2 class="logo">Travel<span class="arrow">→</span></h2>
+                <p class="tagline">Travel helps companies manage payments easily.</p>
+                <div class="social-icons">
+                    <a href="#"><img src="~/images/linkedin-icon.png" alt="LinkedIn"></a>
+                    <a href="#"><img src="~/images/instagram-icon.png" alt="instagram"></a>
+                </div>
+            </div>
+
+            <!-- Middle Sections -->
+            <div class="footer-links">
+                <h3>Company</h3>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Pricing</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h3>Destinations</h3>
+                <ul>
+                    <li><a href="#">Maldives</a></li>
+                    <li><a href="#">Los Angeles</a></li>
+                    <li><a href="#">Las Vegas</a></li>
+                    <li><a href="#">Toronto</a></li>
+                </ul>
+            </div>    
+        </div>
+
+        <hr class="footer-divider">
+        <p class="footer-text">Copyright © Xpro 2025. All Rights Reserved.</p>
+    </footer>
+
+    <script src="~/js/Hotel.js"></script>
+    <script src="/_framework/aspnetcore-browser-refresh.js"></script>
+
+
+</body>
+</html>
+

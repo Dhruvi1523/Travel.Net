@@ -1,0 +1,14 @@
+@{
+    ViewData["Title"] = "Error";
+}
+
+<h1 style="color: red;">Oops! Something went wrong.</h1>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <p style="font-size: 18px;">@ViewBag.ErrorMessage</p>
+}
+else
+{
+    <p style="font-size: 18px;">An unexpected error occurred. Please try again later.</p>
+}

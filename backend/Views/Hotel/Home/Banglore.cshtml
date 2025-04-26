@@ -1,0 +1,151 @@
+@model List<backend.Hotel.Models.HotelViewModel>
+@{
+    ViewBag.Title = "Popular Hotels in Banglore";
+    @* Layout = "~/Views/Shared/_Layout.cshtml"; *@
+}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    
+    .hotel-card {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        margin-bottom: 25px;
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        width: 70%;
+        margin-left:200px ;
+    }
+
+    .hotel-left {
+        display: flex;
+        width: 70%;
+    }
+
+    .main-image {
+        margin-top: 20px;
+        width: 200px;
+        height: 140px;
+        border-radius: 10px;
+        object-fit: cover;
+        margin-right: 20px;
+    }
+
+    .hotel-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .rating-box {
+        background-color: #0078ff;
+        color: #fff;
+        padding: 4px 10px;
+        border-radius: 5px;
+        font-weight: bold;
+        display: inline-block;
+        margin-right: 8px;
+    }
+
+    .price-section {
+        text-align: right;
+        width: 30%;
+    }
+
+    .original-price {
+        text-decoration: line-through;
+        color: #999;
+        font-size: 14px;
+    }
+
+    .discounted-price {
+        font-size: 22px;
+        font-weight: bold;
+        color: #111;
+    }
+
+    .fees {
+        color: #777;
+        font-size: 14px;
+    }
+
+    .book-now {
+        color: #0078ff;
+        font-weight: bold;
+        font-size: 14px;
+        margin-top: 10px;
+        display: inline-block;
+    }
+
+    .rating-label {
+        color: #0b7dda;
+        font-weight: bold;
+        font-size: 16px;
+        margin-right: 5px;
+    }
+
+    .subtext {
+        color: #555;
+        font-size: 14px;
+    }
+
+    .discount-bar {
+        background: #e8fff1;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 5px;
+        color: #157347;
+        font-weight: 600;
+    }
+    #text{
+        margin-top: 50px;
+        margin-left: 200px;
+    }
+</style>
+
+<h2 id="text">Popular Hotels in Banglore</h2>
+<br>
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var hotel in Model)
+    {
+        <div class="hotel-card">
+            <div class="hotel-left">
+                <img src="@hotel.ImageUrl" alt="@hotel.Name" class="main-image" />
+                <div class="hotel-info">
+                    <h3><strong>@hotel.Name</strong></h3>
+                    <ul style="list-style:none; padding-left:0;">
+                        <li style="color:green;">✓ Free Cancellation till check-in</li>
+                        <li style="color:green;">✓ Book with ₹0 Payment</li>
+                    </ul>
+                    <p class="subtext"> @hotel.Address...</p>
+                </div>
+            </div>
+
+            <div class="price-section">
+                <div>
+                    <span class="rating-label">Good</span>
+                    <span class="rating-box">@hotel.Rating</span><br />
+                    <small>(@hotel.ReviewCount Ratings)</small>
+                </div>
+                <div style="margin-top: 10px;">
+                    <span class="original-price">₹ @((hotel.PricePerNight + 200).ToString("0"))</span><br />
+                    <span class="discounted-price">₹ @hotel.PricePerNight.ToString("0")</span><br />
+                    <span class="fees">+ ₹ 180 taxes & fees<br />Per Night</span>
+                </div>
+                <br><br>
+                @* <a href="#" class="book-now">Book Now </a> *@
+                <a href="@Url.Action("Details", "Hotel", new { id = hotel.Id })" class="book-now">Book Now</a>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p>No hotels found.</p>
+}
