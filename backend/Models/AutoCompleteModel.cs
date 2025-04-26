@@ -1,5 +1,6 @@
 
-namespace backend.Models{
+namespace backend.Models
+{
     /// <summary>
     /// Represents a single autocomplete result for airport or city suggestions.
     /// </summary>

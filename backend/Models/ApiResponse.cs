@@ -29,7 +29,7 @@ namespace backend.Models
         /// <param name="success">Whether the request was successful.</param>
         /// <param name="data">The data to return.</param>
         /// <param name="error">The error message (if any).</param>
-        public ApiResponse(bool success, T data = default, string error = null , string message = null)
+        public ApiResponse(bool success, T data = default, string error = null, string message = null)
         {
             Success = success;
             Data = data;

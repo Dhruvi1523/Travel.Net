@@ -15,7 +15,7 @@ namespace backend.Services
         Task<User> GetUserByUsernameAsync(string username);
     }
 
-  
+
     public class AuthService : IAuthService
     {
         private readonly IMongoDbService _mongoDbService;
@@ -81,7 +81,7 @@ namespace backend.Services
             var refreshToken = _tokenService.GenerateRefreshToken();
             var expiry = DateTime.UtcNow.AddMinutes(double.Parse(_configuration["Jwt:ExpiryMinutes"]));
 
-            user.RefreshToken = 
+            user.RefreshToken =
                 new RefreshToken
                 {
                     Token = refreshToken,
@@ -126,7 +126,7 @@ namespace backend.Services
             var newRefreshToken = _tokenService.GenerateRefreshToken();
             var expiry = DateTime.UtcNow.AddMinutes(double.Parse(_configuration["Jwt:ExpiryMinutes"]));
 
-          
+
             user.RefreshToken = new RefreshToken
             {
                 Token = newRefreshToken,

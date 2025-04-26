@@ -18,13 +18,6 @@ namespace backend.Controllers
             _authService = authService;
             _logger = logger;
         }
-
-        /// <summary>
-        /// Registers a new user with the provided credentials.
-        /// </summary>
-        /// <param name="model">The registration details including username, password, and email.</param>
-        /// <returns>An IActionResult indicating success with the registered username or an error message.</returns>
-
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
@@ -40,12 +33,6 @@ namespace backend.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-        /// <summary>
-        /// Authenticates a user and returns an access token and refresh token.
-        /// </summary>
-        /// <param name="model">The login credentials including username and password.</param>
-        /// <returns>An IActionResult with the authentication response or an error message.</returns>
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
@@ -61,13 +48,13 @@ namespace backend.Controllers
                     SameSite = SameSiteMode.Strict,
                     Expires = authResponse.Expires
                 });
-                
+
                 Response.Cookies.Append("TravelRefreshToken", authResponse.RefreshToken, new CookieOptions
                 {
                     HttpOnly = true,
                     Secure = true,
                     SameSite = SameSiteMode.Strict,
-                    Expires =  DateTime.UtcNow.AddDays(7) 
+                    Expires = DateTime.UtcNow.AddDays(7)
                 });
 
                 return Ok("Login Successfully...");
@@ -83,12 +70,6 @@ namespace backend.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-
-        /// <summary>
-        /// Refreshes an expired access token using a refresh token.
-        /// </summary>
-        /// <param name="request">The request containing the expired access token and refresh token.</param>
-        /// <returns>An IActionResult with a new access token and refresh token or an error message.</returns>
         [HttpGet("refresh")]
         public async Task<IActionResult> Refresh()
         {
@@ -96,7 +77,7 @@ namespace backend.Controllers
             {
                 var accessToken = Request.Cookies["TravelAccessToken"];
                 var refreshToken = Request.Cookies["TravelRefreshToken"];
-                var authResponse = await _authService.RefreshTokenAsync(accessToken , refreshToken);
+                var authResponse = await _authService.RefreshTokenAsync(accessToken, refreshToken);
                 _logger.LogInformation("Token refreshed via API");
                 Response.Cookies.Append("TravelAccessToken", authResponse.Token, new CookieOptions
                 {
@@ -105,13 +86,13 @@ namespace backend.Controllers
                     SameSite = SameSiteMode.Strict,
                     Expires = authResponse.Expires
                 });
-                
+
                 Response.Cookies.Append("TravelRefreshToken", authResponse.RefreshToken, new CookieOptions
                 {
                     HttpOnly = true,
                     Secure = true,
                     SameSite = SameSiteMode.Strict,
-                    Expires =  DateTime.UtcNow.AddDays(7) 
+                    Expires = DateTime.UtcNow.AddDays(7)
                 });
                 return Ok("Refresh Completed...");
             }
@@ -127,10 +108,7 @@ namespace backend.Controllers
             }
         }
 
-        /// <summary>
-        /// Retrieves details of the authenticated user.
-        /// </summary>
-        /// <returns>An IActionResult with the user's username and email, or an error if unauthorized or not found.</returns>
+       
         [HttpGet("me")]
         // [Authorize] // Protects this endpoint
         public async Task<IActionResult> GetUserDetails()

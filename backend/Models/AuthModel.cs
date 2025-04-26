@@ -2,9 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace backend.Models
 {
-    /// <summary>
-    /// Model for user registration requests.
-    /// </summary>
+   
     public class RegisterModel
     {
         [Required(ErrorMessage = "Username is required")]
@@ -19,10 +17,7 @@ namespace backend.Models
         [EmailAddress(ErrorMessage = "Invalid email format")]
         public string Email { get; set; } = null!;
     }
-
-    /// <summary>
-    /// Model for user login requests.
-    /// </summary>
+   
     public class LoginModel
     {
         [Required(ErrorMessage = "Username is required")]
@@ -32,9 +27,6 @@ namespace backend.Models
         public string Password { get; set; } = null!;
     }
 
-    /// <summary>
-    /// Response model for successful authentication.
-    /// </summary>
     public class AuthResponse
     {
         [Required]
@@ -53,5 +45,5 @@ namespace backend.Models
         public DateTime Created { get; set; } // When it was issued
     }
 
-    
+
 }
