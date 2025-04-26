@@ -1,0 +1,125 @@
+@model backend.Models.FlightBookingModel
+
+<div class="min-h-screen bg-[var(--light-100)] py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto bg-[var(--white)] rounded-[var(--border-radius-lg)] shadow-[var(--shadow-md)] overflow-hidden transition-[var(--transition-normal)] hover:shadow-[var(--shadow-lg)]">
+        <!-- Booking ID Badge -->
+        <div class="px-6 pt-6 pb-2">
+            <div class="inline-flex items-center bg-[var(--light-200)] rounded-full py-1 px-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[var(--primary)] mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+                <span class="text-xs font-medium text-[var(--dark-700)]">Booking ID: @Model.BookingId</span>
+            </div>
+        </div>
+
+        <!-- Card Header -->
+        <div class="bg-[var(--primary)] p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-[var(--white)]">Booking Confirmation</h2>
+                    <p class="text-[var(--primary-100)] mt-1">Your flight is confirmed!</p>
+                </div>
+                <div class="bg-[var(--primary-200)]/30 p-3 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[var(--white)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-6 sm:p-8">
+            <!-- Passenger Details Section -->
+            <div class="mb-8">
+                <div class="flex items-center mb-4">
+                    <div class="bg-[var(--primary-100)] p-2 rounded-[var(--border-radius-sm)] mr-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[var(--primary)]" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-[var(--dark-800)]">Passenger Details</h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-[var(--light-200)] p-4 rounded-[var(--border-radius-sm)]">
+                        <p class="text-sm text-[var(--gray-500)]">Full Name</p>
+                        <p class="font-medium text-[var(--dark-800)]">@Model.FullName</p>
+                    </div>
+                    <div class="bg-[var(--light-200)] p-4 rounded-[var(--border-radius-sm)]">
+                        <p class="text-sm text-[var(--gray-500)]">Gender</p>
+                        <p class="font-medium text-[var(--dark-800)]">@Model.Gender</p>
+                    </div>
+                    <div class="bg-[var(--light-200)] p-4 rounded-[var(--border-radius-sm)]">
+                        <p class="text-sm text-[var(--gray-500)]">Date of Birth</p>
+                        <p class="font-medium text-[var(--dark-800)]">@Model.DateOfBirth.ToString("yyyy-MM-dd")</p>
+                    </div>
+                    <div class="bg-[var(--light-200)] p-4 rounded-[var(--border-radius-sm)]">
+                        <p class="text-sm text-[var(--gray-500)]">Phone Number</p>
+                        <p class="font-medium text-[var(--dark-800)]">@Model.PhoneNumber</p>
+                    </div>
+                    <div class="bg-[var(--light-200)] p-4 rounded-[var(--border-radius-sm)]">
+                        <p class="text-sm text-[var(--gray-500)]">Flight Class</p>
+                        <p class="font-medium text-[var(--dark-800)]">@Model.FlightClass</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Divider with Icon -->
+            <div class="relative my-8">
+                <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                    <div class="w-full border-t border-[var(--light-300)]"></div>
+                </div>
+                <div class="relative flex justify-center">
+                    <span class="bg-[var(--white)] px-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[var(--primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7l4-4m0 0l4 4m-4-4v18m-6-18h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2z" />
+                        </svg>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Flight Info Section -->
+            <div class="mt-8">
+                <div class="flex items-center mb-4">
+                    <div class="bg-[var(--primary-100)] p-2 rounded-[var(--border-radius-sm)] mr-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[var(--primary)]" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-[var(--dark-800)]">Flight Information</h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-[var(--light-200)] p-4 rounded-[var(--border-radius-sm)]">
+                        <p class="text-sm text-[var(--gray-500)]">Origin</p>
+                        <p class="font-medium text-[var(--dark-800)]">@Model.Origin</p>
+                    </div>
+                    <div class="bg-[var(--light-200)] p-4 rounded-[var(--border-radius-sm)]">
+                        <p class="text-sm text-[var(--gray-500)]">Destination</p>
+                        <p class="font-medium text-[var(--dark-800)]">@Model.Destination</p>
+                    </div>
+                    <div class="bg-[var(--light-200)] p-4 rounded-[var(--border-radius-sm)]">
+                        <p class="text-sm text-[var(--gray-500)]">Flight Date</p>
+                        <p class="font-medium text-[var(--dark-800)]">@Model.FlightDate</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Confirmation Message -->
+            <div class="mt-8 p-4 bg-[var(--primary-100)] rounded-[var(--border-radius-md)] border border-[var(--primary-200)]">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-[var(--primary-600)]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-[var(--primary-800)]">
+                            Your booking has been confirmed. A confirmation email has been sent to your registered email address.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

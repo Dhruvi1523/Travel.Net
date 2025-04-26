@@ -1,0 +1,265 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    /* Terra Cotta Color Palette */
+    --primary: #DF6951;        /* Main Terra Cotta */
+    --primary-100: #F9E2DD;   /* 10% opacity */
+    --primary-200: #F2C5BB;   /* 20% opacity */
+    --primary-300: #EBA799;   /* 30% opacity */
+    --primary-400: #E58A77;   /* 60% opacity */
+    --primary-600: #C85E47;   /* Darker shade */
+    --primary-700: #B1533D;   /* Even darker */
+    --primary-800: #9A4833;   /* For text */
+    
+    /* Neutrals */
+    --white: #FFFFFF;
+    --light-100: #FDF9F8;     /* Warm white */
+    --light-200: #FAF3F2;     /* Slightly darker */
+    --light-300: #F5EDEB;     /* Borders */
+    --gray-400: #D7CECB;      /* Light gray */
+    --gray-500: #A89B97;      /* Medium gray */
+    --gray-600: #796A65;      /* Dark gray */
+    --dark-700: #4A3D39;      /* Text */
+    --dark-800: #2E2522;      /* Headings */
+    --dark-900: #1A1210;      /* Dark backgrounds */
+  
+    /* UI Variables */
+    --border-radius-sm: 6px;
+    --border-radius-md: 12px;
+    --border-radius-lg: 20px;
+    --shadow-sm: 0 2px 8px rgba(46, 42, 40, 0.08);
+    --shadow-md: 0 4px 16px rgba(46, 42, 40, 0.12);
+    --shadow-lg: 0 8px 24px rgba(46, 42, 40, 0.16);
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, var(--light-100), var(--light-200));
+    color: var(--dark-700);
+    min-height: 100vh;
+    padding: 2rem;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.heading {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--dark-800);
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.subheading {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--dark-800);
+    text-align: center;
+    margin: 1rem 0 2rem;
+}
+
+.flight-card {
+    background: var(--white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 2rem;
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeIn var(--transition-slow) forwards;
+}
+
+.flight-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 120px;
+    background: linear-gradient(rgba(223, 105, 81, 0.1), transparent);
+}
+
+.flight-header {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--primary-800);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    z-index: 1;
+    position: relative;
+}
+
+.flight-header::before {
+    content: '✈️';
+    font-size: 1.3rem;
+}
+
+.flight-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    z-index: 1;
+    position: relative;
+}
+
+.flight-details span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    color: var(--dark-700);
+}
+
+.flight-details span::before {
+    font-size: 1.1rem;
+    color: var(--primary);
+}
+
+.flight-details span:nth-child(1)::before { content: '🛫'; }
+.flight-details span:nth-child(2)::before { content: '🏙️'; }
+.flight-details span:nth-child(3)::before { content: '📍'; }
+.flight-details span:nth-child(4)::before { content: '⏰'; }
+.flight-details span:nth-child(5)::before { content: '🕒'; }
+.flight-details span:nth-child(6)::before { content: '⏱️'; }
+.flight-details span:nth-child(7)::before { content: '🚏'; }
+
+.agents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.agent-card {
+    background: var(--white);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: 1.5rem;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    opacity: 0;
+    animation: fadeIn var(--transition-slow) forwards;
+    border: 1px solid var(--light-300);
+}
+
+.agent-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.agent-name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.agent-name::before {
+    content: '🌐';
+    font-size: 1.2rem;
+}
+
+.agent-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--dark-800);
+    margin: 0.5rem 0;
+}
+
+.agent-rating {
+    font-size: 0.95rem;
+    color: var(--gray-600);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-bottom: 1rem;
+}
+
+.book-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(90deg, var(--primary), var(--primary-400));
+    color: var(--white);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius-sm);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: background var(--transition-normal), transform var(--transition-fast);
+    width: 100%;
+    text-align: center;
+}
+
+.book-button:hover {
+    background: linear-gradient(90deg, var(--primary-600), var(--primary));
+    transform: translateY(-2px);
+}
+
+.book-button::after {
+    content: '→';
+    margin-left: 0.5rem;
+    font-size: 1.1rem;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+    }
+
+    .heading {
+        font-size: 2rem;
+    }
+
+    .subheading {
+        font-size: 1.5rem;
+    }
+
+    .flight-card {
+        padding: 1.5rem;
+    }
+
+    .flight-details {
+        grid-template-columns: 1fr;
+    }
+
+    .agent-card {
+        padding: 1.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .flight-details span {
+        font-size: 0.9rem;
+    }
+
+    .agent-name {
+        font-size: 1.2rem;
+    }
+
+    .agent-price {
+        font-size: 1.3rem;
+    }
+}

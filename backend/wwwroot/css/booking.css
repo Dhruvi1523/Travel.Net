@@ -1,0 +1,84 @@
+/* Booking Form Modern Styles */
+form {
+    max-width: 600px;
+    margin: 30px auto;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+form h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 24px;
+    color: #1b9cfb;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.form-control,
+textarea,
+select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    font-size: 16px;
+    transition: 0.3s ease;
+    background-color: #f9f9f9;
+}
+
+.form-control:focus,
+select:focus,
+textarea:focus {
+    border-color: #1b9cfb;
+    background-color: #fff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(27, 156, 251, 0.2);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.text-danger {
+    font-size: 14px;
+    color: #e74c3c;
+    margin-top: 5px;
+    display: block;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #1b9cfb;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #0a7fd0;
+}
+
+@media (max-width: 576px) {
+    form {
+        padding: 20px;
+    }
+}

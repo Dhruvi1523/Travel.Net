@@ -1,0 +1,72 @@
+
+
+@model backend.Models.GetFlightDetailsResponse
+
+@{
+    Layout = null;
+    var flight = Model.legs.FirstOrDefault();
+    var agents = Model.bookingAgents.OrderBy(a => Convert.ToDecimal(a.Price)).ToList();
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flight Details - @Model.Origin.CityName to @Model.Destination.CityName</title>
+    <link rel="stylesheet" href="~/css/flightBooking.css" />
+</head>
+<body>
+    <div class="container">
+        <h1 class="heading">Flight from @Model.Origin.CityName to @Model.Destination.CityName</h1>
+
+        <div id="flightInfo" class="flight-info">
+            @if (flight != null)
+            {
+                <div class="flight-card">
+                    <div class="flight-header">
+                        @flight.MarketingCarrier.CarrierName (@flight.MarketingCarrier.DisplayCode)
+                    </div>
+                    <div class="flight-details">
+                        <span><strong>Flight:</strong> @flight.FlightNumber</span>
+                        <span><strong>From:</strong> @flight.Origin.CityName (@flight.Origin.DisplayCode)</span>
+                        <span><strong>To:</strong> @flight.Destination.CityName (@flight.Destination.DisplayCode)</span>
+                        <span><strong>Departure:</strong> @flight.Departure.ToLocalTime().ToString("f")</span>
+                        <span><strong>Arrival:</strong> @flight.Arrival.ToLocalTime().ToString("f")</span>
+                        <span><strong>Duration:</strong> @flight.Duration</span>
+                        <span><strong>Stops:</strong> @flight.StopDescription</span>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <h2 class="subheading">Booking Options</h2>
+        <div id="bookingAgents" class="agents-grid">
+            @foreach (var agent in agents)
+            {
+                <div class="agent-card">
+                    <div class="agent-name">@agent.Name</div>
+                    <div class="agent-price">$@agent.Price</div>
+                    <div class="agent-rating">⭐ @agent.RatingValue (@agent.RatingCount reviews)</div>
+
+                    <form method="post" asp-controller="Book" asp-action="FillBookingForm">
+                        <input type="hidden" name="agentId" value="@agent.Id" />
+                        <input type="hidden" name="itineraryId" value="@Model.ItineraryId" />
+                        <input type="hidden" name="bookingId" value="@Model.BookingSessionId" />
+                        <input type="hidden" name="origin" value="@flight.Origin.CityName" />
+                        <input type="hidden" name="destination" value="@flight.Destination.CityName" />
+                        <input type="hidden" name="flightDate" value="@flight.Arrival />
+                        <button type="submit" class="btn btn-primary">Book Now</button>
+                    </form>
+
+
+
+
+                </div>
+            }
+        </div>
+    </div>
+</body>
+</html>
+
+

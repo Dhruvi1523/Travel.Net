@@ -1,0 +1,191 @@
+@model backend.Models.FlightBookingModel
+
+@{
+    ViewData["Title"] = "Flight Booking Form";
+}
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f8fc;
+        padding: 20px;
+    }
+
+    h2 {
+        text-align: center;
+        color: #024c82;
+        margin-bottom: 30px;
+    }
+
+    form {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: white;
+        border-radius: 12px;
+        padding: 25px 30px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: 600;
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        box-sizing: border-box;
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+    }
+
+    input:focus,
+    select:focus {
+        border-color: #1b9cfb;
+        outline: none;
+    }
+
+    .text-danger {
+        font-size: 0.9rem;
+        color: red;
+        margin-top: 5px;
+        display: block;
+    }
+
+    button[type="submit"] {
+        background-color: #1b9cfb;
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        width: 100%;
+        transition: background-color 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #025796;
+    }
+</style>
+
+<h2>Flight Booking Form</h2>
+
+<form id="flightBookingForm" onsubmit="submitForm(event)">
+    <div class="form-group">
+        <label asp-for="FullName"></label>
+        <input asp-for="FullName" class="form-control" />
+        <span asp-validation-for="FullName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Gender"></label>
+        <select asp-for="Gender" class="form-control">
+            <option value="">Select Gender</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+        </select>
+        <span asp-validation-for="Gender" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DateOfBirth"></label>
+        <input asp-for="DateOfBirth" type="date" class="form-control" />
+        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PhoneNumber"></label>
+        <input asp-for="PhoneNumber" class="form-control" />
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="FlightClass"></label>
+        <select asp-for="FlightClass" class="form-control">
+            <option value="">Select Class</option>
+            <option>Economy</option>
+            <option>Business</option>
+            <option>First Class</option>
+        </select>
+        <span asp-validation-for="FlightClass" class="text-danger"></span>
+    </div>
+
+    <input type="hidden" asp-for="AgentId" />
+    <input type="hidden" asp-for="ItineraryId" />
+    <input type="hidden" asp-for="BookingId" />
+    <input type="hidden" asp-for="Origin" />
+    <input type="hidden" asp-for="Destination" />
+    <input type="hidden" asp-for="FlightDate" />
+
+    <button type="submit" class="btn btn-primary">Proceed to Payment</button>
+</form>
+<script>
+    async function submitForm(event) {
+        event.preventDefault();
+
+        const form = document.getElementById('flightBookingForm');
+        const formData = new FormData(form);
+
+        const bookingData = {
+            fullName: formData.get("FullName"),
+            gender: formData.get("Gender"),
+            dateOfBirth: formData.get("DateOfBirth"),
+            phoneNumber: formData.get("PhoneNumber"),
+            flightClass: formData.get("FlightClass"),
+            agentId: formData.get("AgentId"),
+            itineraryId: formData.get("ItineraryId"),
+            bookingId: formData.get("BookingId"),
+            flightDate : formData.get("FlightDate"),
+            origin : formData.get("Origin"),
+            destination : formData.get("Destination")
+        };
+        console.log(bookingData)
+
+        try {
+            const response = await fetch('/api/book/submit-booking', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(bookingData)
+            });
+
+            const result = await response.json();
+            console.log("result")
+            if (response.ok && result.redirectUrl) {
+              const url = new URL(result.redirectUrl, window.location.origin);
+        if (result.bookingId) {
+            url.searchParams.append("bookingId", result.bookingId);
+        }
+
+        // 🚀 Actual redirection
+        window.location.href = url.toString();
+            } else {
+                console.error(result);
+                alert("Booking failed: " + (result.message || "Check form data."));
+            }
+        } catch (error) {
+            console.error("Error submitting booking:", error);
+            alert("An error occurred.");
+        }
+    }
+</script>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

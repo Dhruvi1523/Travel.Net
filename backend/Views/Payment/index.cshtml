@@ -1,0 +1,114 @@
+@{
+    ViewBag.Title = "Secure Payment";
+    var user = "Dhruvi Jingar";
+    var amount = "3500";
+    var orderId = "ORD123456";
+    var origin = "Delhi (DEL)";
+    var destination = "Chennai (MAA)";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        .payment-container {
+            max-width: 500px;
+            background: #fff;
+            margin: 60px auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .summary {
+            margin-bottom: 20px;
+        }
+
+        .summary p {
+            margin: 8px 0;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        input[type="text"], input[type="number"], input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-top: 5px;
+        }
+
+        .btn-submit {
+            background: #1b9cfb;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 16px;
+            margin-top: 25px;
+            cursor: pointer;
+        }
+
+        .btn-submit:hover {
+            background: #0278c7;
+        }
+
+        .card-details {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <h2>Payment Gateway</h2>
+
+        <div class="summary">
+            <p><strong>User:</strong> @user</p>
+            <p><strong>From:</strong> @origin</p>
+            <p><strong>To:</strong> @destination</p>
+            <p><strong>Amount:</strong> ₹@amount</p>
+            <p><strong>Order ID:</strong> @orderId</p>
+        </div>
+
+        <form method="get" action="/PaymentStatus">
+            <input type="hidden" name="status" value="success" />
+            <input type="hidden" name="orderId" value="@orderId" />
+
+            <div class="card-details">
+                <label>Cardholder Name</label>
+                <input type="text" name="cardName" placeholder="e.g. Dhruvi Jingar" value="Dhruvi Jingar" required />
+
+                <label>Card Number</label>
+                <input type="tel" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" value="1234 5678 9012 3456" required />
+
+                <label>Expiry Date</label>
+                <input type="text" name="expiry" placeholder="MM/YY" maxlength="5" value="12/28" required />
+
+                <label>CVV</label>
+                <input type="number" name="cvv" placeholder="123" maxlength="4" value="123" required />
+            </div>
+
+            <button type="submit" class="btn-submit">Pay ₹@amount</button>
+        </form>
+    </div>
+</body>
+</html>

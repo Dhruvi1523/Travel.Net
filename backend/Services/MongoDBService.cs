@@ -6,6 +6,7 @@ namespace backend.Services
     public interface IMongoDbService
     {
         IMongoCollection<User> User { get; }
+        IMongoCollection<FlightBookingModel> FlightBooking { get; }
     }
 
     public class MongoDbService : IMongoDbService
@@ -19,5 +20,8 @@ namespace backend.Services
         }
 
         public IMongoCollection<User> User => _database.GetCollection<User>("User");
+        public IMongoCollection<FlightBookingModel> FlightBooking => _database.GetCollection<FlightBookingModel>("FlightBooking");
+
+        
     }
 }

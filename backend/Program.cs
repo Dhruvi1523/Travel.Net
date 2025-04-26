@@ -11,6 +11,8 @@ builder.Services.AddControllersWithViews(); // Use AddControllers() for a Web AP
 builder.Services.AddScoped<IMongoDbService, MongoDbService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
+
 
 // Configure HttpClient for AirScrapper API
 builder.Services.AddHttpClient(
@@ -137,5 +139,13 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers(); // Map API controllers (instead of MVC routing)
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+});
+
+
 
 app.Run();
